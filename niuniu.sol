@@ -68,16 +68,17 @@ contract NiuNiu{
         uint256 hash=uint256(keccak256(abi.encodePacked(block.timestamp))); //Generate random long number
         uint256 count=51; //Length of cards remaining
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
-            if(player[room[a].players[i]].playing&&player[msg.sender].balance>=room[a].betSize){
+        if(player[room[a].players[i]].playing&&player[msg.sender].balance>=room[a].betSize){
             //Only when they are choose to play the round and have enough tokens
-            if(player[msg.sender].cards.length>0) //Clear cards if existed
-                for(uint256 k=0;k<player[msg.sender].cards.length;k++)player[msg.sender].cards.pop;
-                for(uint256 j=0;j<5;j++){ //Only distribute 5 cards
-                    uint256 ran=hash%count; //Pick the remaining cards
-                    player[room[a].players[i]].cards.push(table[ran]); //Set the cards
-                    table[ran]=table[count]; //Move the last position to replace the current position
-                    hash/=count; //Create different random
-                    count--; //Take away the last position
+            if(player[room[a].players[i]].cards.length>0) //Clear cards if existed
+            for(uint256 k=0;k<player[room[a].players[i]].cards.length;k++)
+            player[room[a].players[i]].cards.pop;
+            for(uint256 j=0;j<5;j++){ //Only distribute 5 cards
+                uint256 ran=hash%count; //Pick the remaining cards
+                player[room[a].players[i]].cards.push(table[ran]); //Set the cards
+                table[ran]=table[count]; //Move the last position to replace the current position
+                hash/=count; //Create different random
+                count--; //Take away the last position
             }
         }
     }}
@@ -107,5 +108,22 @@ contract NiuNiu{
 
     function testPoints(uint256 a)external view returns(uint256){
         return player[room[1].players[a]].points;
+    }
+
+    function testClearCards()external returns(uint256){
+        /*return player[msg.sender].cards.length;
+        if(player[msg.sender].cards.length>0){ //Clear cards if existed
+            player[msg.sender].cards[0]=0;
+            for(uint256 k=0;k<5;k++)
+            player[msg.sender].cards.pop;
+        }*/
+        player[msg.sender].cards[0]=0;
+        player[msg.sender].cards.pop;
+        player[msg.sender].cards.pop;
+        player[msg.sender].cards.pop;
+        player[msg.sender].cards.pop;
+        player[msg.sender].cards.pop;
+        player[msg.sender].cards[0]=0;
+    return player[msg.sender].cards.length;
     }
 }

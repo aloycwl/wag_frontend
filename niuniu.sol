@@ -72,7 +72,7 @@ contract NiuNiu{
             //Only when they are choose to play the round and have enough tokens
             for(uint256 j=0;j<5;j++){ //Only distribute 5 cards
                 uint256 ran=hash%count; //Pick the remaining cards
-                player[room[a].players[i]].cards[i]=table[ran]; //Set the cards
+                player[room[a].players[i]].cards[j]=table[ran]; //Set the cards
                 table[ran]=table[count]; //Move the last position to replace the current position
                 hash/=count; //Create different random
                 count--; //Take away the last position
@@ -82,16 +82,24 @@ contract NiuNiu{
 
     function CHECK(uint256 a)external{unchecked{
         require(msg.sender==room[a].players[room[a].host]); //Only host can check
+        uint256 highest;
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
         if(player[room[a].players[i]].cards[0]>0){ //If player is playing with more than 1 card
             uint256 count;
-            for(uint256 j=0;j>5;j++){ //Reverse for-loop to pop
-                    count+=_cardValue(player[room[a].players[i]].cards[j]);
+            for(uint256 j=0;j<5;j++){ //Reverse for-loop to pop
+                count+=_cardValue(player[room[a].players[i]].cards[j]);
                 player[room[a].players[i]].cards[j]=0;
             }
             count%=10;
-            player[room[a].players[i]].points=count==0?10:count; //10 being highest
+            count=count==0?10:count;
+            player[room[a].players[i]].points=count; //10 being highest
+            highest=count>=highest?count:highest;
         }
+        /******loop to get number of highest******/
+        /******save as count******/
+        /******loop to distribute pool tokens******/
+        /******5% to owner******/
+        /******5% to host******/
     }}
 
     function _cardValue(uint256 a)private pure returns(uint256){unchecked{

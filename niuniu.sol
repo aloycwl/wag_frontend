@@ -8,6 +8,7 @@ contract NiuNiu{
         address[]players;
         uint256 betSize;
         uint256 host;
+        uint256 balance;
         bool hidden;
     }
     struct Player{
@@ -22,7 +23,6 @@ contract NiuNiu{
     mapping(uint256=>Room)public room;
     mapping(address=>Player)public player;
     modifier onlyOwner(){require(_owner==msg.sender);_;}
-
 
     //when last user leave room will delete the room
     //kick player when afk? and remove profile.room 
@@ -54,21 +54,24 @@ contract NiuNiu{
         if(room[a].players.length==0){ //Initiate the room
             require(b>0); //Bet size must be more than 0
             room[a].host=0; //Set the new host
-            room[a].betSize=b;
+            room[a].betSize=b; //Set the room bet size
         }
         require(player[msg.sender].balance>=room[a].betSize);
         player[msg.sender].playing=true;
-        player[msg.sender].room=a;
+        player[msg.sender].room=a; //In case player disconnect
         room[a].players.push(msg.sender); //Add a player
     }
 
     function DEAL(uint256 a)external{unchecked{
-        require(msg.sender==room[a].players[room[a].host]); //Only host can deal
+        require(msg.sender==room[a].players[room[a].host]&&room[a].balance==0);
+        //Only host can deal and game is not being dealt yet
         uint256[52]memory table=[uint256(3),39,19,36,6,24,46,16,29,34,47,1,7,13,15,44,25,18,37,21,28,31,41,12,42,14,4,32,23,9,17,51,2,5,43,33,20,40,8,49,52,30,22,27,38,35,45,50,26,48,10,11];
         uint256 hash=uint256(keccak256(abi.encodePacked(block.timestamp))); //Generate random long number
         uint256 count=51; //Length of cards remaining
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
         if(player[room[a].players[i]].playing&&player[msg.sender].balance>=room[a].betSize){
+            player[room[a].players[i]].balance-=room[a].betSize; //Generate pool amount
+            room[a].balance+=room[a].betSize;
             //Only when they are choose to play the round and have enough tokens
             for(uint256 j=0;j<5;j++){ //Only distribute 5 cards
                 uint256 ran=hash%count; //Pick the remaining cards
@@ -81,7 +84,7 @@ contract NiuNiu{
     }}
 
     function CHECK(uint256 a)external{unchecked{
-        require(msg.sender==room[a].players[room[a].host]); //Only host can check
+        require(msg.sender==room[a].players[room[a].host]&&room[a].balance>0); //Only host can check & have dealt
         uint256 highest;
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
         if(player[room[a].players[i]].cards[0]>0){ //If player is playing with more than 1 card
@@ -95,11 +98,14 @@ contract NiuNiu{
             player[room[a].players[i]].points=count; //10 being highest
             highest=count>=highest?count:highest;
         }
-        /******loop to get number of highest******/
-        /******save as count******/
-        /******loop to distribute pool tokens******/
-        /******5% to owner******/
-        /******5% to host******/
+        uint256 winnerCount; //Getting number of winners
+        for(uint256 i=0;i<room[a].players.length;i++)
+        if(player[room[a].players[i]].points==highest)winnerCount++;
+        player[room[a].players[room[a].host]].balance+=(room[a].balance*5/100); //5% for host (Maybe safemath issue)
+        winnerCount=room[a].balance=room[a].balance*9/10/winnerCount; //Minus 5% for admin and divide winnings
+        for(uint256 i=0;i<room[a].players.length;i++) //Distribute tokens
+        if(player[room[a].players[i]].points==highest)player[room[a].players[i]].balance+=winnerCount;
+        room[a].balance=0;
     }}
 
     function _cardValue(uint256 a)private pure returns(uint256){unchecked{

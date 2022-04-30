@@ -8,6 +8,9 @@ contract NiuNiu{
         uint256 room;
         uint256 card1;
         uint256 card2;
+        uint256 card3;
+        uint256 card4;
+        uint256 card5;
     }
     address private _owner;
     mapping(uint256=>Room)public room;
@@ -28,10 +31,17 @@ contract NiuNiu{
         _owner=msg.sender;
     }
 
-    function CardValue(uint256 a)external pure returns(uint256){unchecked{
+    function _cardValue(uint256 a)private pure returns(uint256){unchecked{
         require(a>0&&a<53);
         a%=13;
         return a==0||a>9?10:a;
     }}
+
+    function _distribute(uint256 a)private{
+        //room number
+        uint256[52]memory cards=[uint256(3),39,19,36,6,24,46,16,29,34,47,1,7,13,15,44,25,18,37,21,28,31,41,12,42,14,4,32,23,9,17,51,2,5,43,33,20,40,8,49,52,30,22,27,38,35,45,50,26,48,10,11];
+        //move card to the back
+        //reduce count
+    }
     
 }

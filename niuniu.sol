@@ -11,7 +11,7 @@ contract NiuNiu{
         bool hidden;
     }
     struct Player{
-        uint256[]cards;
+        uint256[5]cards;
         uint256 points;
         bool playing;
         uint256 room;
@@ -70,12 +70,9 @@ contract NiuNiu{
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
         if(player[room[a].players[i]].playing&&player[msg.sender].balance>=room[a].betSize){
             //Only when they are choose to play the round and have enough tokens
-            if(player[room[a].players[i]].cards.length>0) //Clear cards if existed
-            for(uint256 k=0;k<player[room[a].players[i]].cards.length;k++)
-            player[room[a].players[i]].cards.pop;
             for(uint256 j=0;j<5;j++){ //Only distribute 5 cards
                 uint256 ran=hash%count; //Pick the remaining cards
-                player[room[a].players[i]].cards.push(table[ran]); //Set the cards
+                player[room[a].players[i]].cards[i]=table[ran]; //Set the cards
                 table[ran]=table[count]; //Move the last position to replace the current position
                 hash/=count; //Create different random
                 count--; //Take away the last position
@@ -86,14 +83,14 @@ contract NiuNiu{
     function CHECK(uint256 a)external{unchecked{
         require(msg.sender==room[a].players[room[a].host]); //Only host can check
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
-            if(player[room[a].players[i]].cards.length>0){ //If player is playing with more than 1 card
-                uint256 count;
-                for(uint256 j=5;j>0;j--){ //Reverse for-loop to pop
-                    count+=_cardValue(player[room[a].players[i]].cards[j-1]);
-                    player[room[a].players[i]].cards.pop();
-                }
-                count%=10;
-                player[room[a].players[i]].points=count==0?10:count; //10 being highest
+        if(player[room[a].players[i]].cards[0]>0){ //If player is playing with more than 1 card
+            uint256 count;
+            for(uint256 j=0;j>5;j++){ //Reverse for-loop to pop
+                    count+=_cardValue(player[room[a].players[i]].cards[j]);
+                player[room[a].players[i]].cards[j]=0;
+            }
+            count%=10;
+            player[room[a].players[i]].points=count==0?10:count; //10 being highest
         }
     }}
 
@@ -102,7 +99,7 @@ contract NiuNiu{
         return a==0||a>9?10:a;
     }}
 
-    function testCards(uint256 a)external view returns(uint256[]memory){
+    function testCards(uint256 a)external view returns(uint256[5]memory){
         return player[room[1].players[a]].cards;
     }
 
@@ -110,20 +107,4 @@ contract NiuNiu{
         return player[room[1].players[a]].points;
     }
 
-    function testClearCards()external returns(uint256){
-        /*return player[msg.sender].cards.length;
-        if(player[msg.sender].cards.length>0){ //Clear cards if existed
-            player[msg.sender].cards[0]=0;
-            for(uint256 k=0;k<5;k++)
-            player[msg.sender].cards.pop;
-        }*/
-        player[msg.sender].cards[0]=0;
-        player[msg.sender].cards.pop;
-        player[msg.sender].cards.pop;
-        player[msg.sender].cards.pop;
-        player[msg.sender].cards.pop;
-        player[msg.sender].cards.pop;
-        player[msg.sender].cards[0]=0;
-    return player[msg.sender].cards.length;
-    }
 }

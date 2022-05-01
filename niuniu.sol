@@ -24,7 +24,7 @@ contract NiuNiu{
 
     constructor(){
         _owner=msg.sender;
-        /***************************TESTING VARIABLE***************************/
+        /***************************TESTING VARIABLE***************************
         player[msg.sender].balance=200;
         player[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2].balance=100;
         player[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db].balance=300;
@@ -51,7 +51,7 @@ contract NiuNiu{
         require(room[a].players.length<5&&player[msg.sender].room!=a&&a!=0);
         //Available room && not same room && not reserved room
         if(room[a].players.length==0){ //Initiate the room
-            require(b>=20); //Bet size must be more than 0
+            require(b>=10); //Bet size must be more than 0
             room[a].betSize=b; //Set the room bet size
         }
         require(player[msg.sender].balance>=room[a].betSize);

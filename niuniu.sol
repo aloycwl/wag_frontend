@@ -24,11 +24,6 @@ contract NiuNiu{
 
     constructor(){
         _owner=msg.sender;
-        /***************************TESTING VARIABLE***************************
-        player[msg.sender].balance=200;
-        player[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2].balance=100;
-        player[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db].balance=300;
-        /***************************TESTING VARIABLE***************************/
     }
 
     function tokenAddress(address a)external{

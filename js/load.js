@@ -258,7 +258,6 @@ async function refreshInfo() {
   $('#info').html(`You are in room ${player.room},
   Balance: ${player.balance}, WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
-  $('#room').html('');
   if (player.room > 0) {
     room = await contract.room(player.room).call();
     str = `Room: ${player.room}, Balance: ${room.balance}, Players count: ${room.playerCount} | `;
@@ -270,7 +269,10 @@ async function refreshInfo() {
     // CHECK
     // display players
     $('#room').html(str + ' | <a onclick="leave()">Leave room</a>');
-  }
+  } else
+    $('#room').html(
+      '<input id="txtRoom"type="text"><button onclick="search()">Search Room #</button>'
+    );
 }
 async function transact(a) {
   waitTxt();

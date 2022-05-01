@@ -3,6 +3,9 @@
 <script src="js/load.js"></script>
 
 <style>
+  a {
+    cursor: pointer;
+  }
   .cards {
     background-image: url('https://aloycwl.github.io/casino/img/cardset.png');
     display: inline-block;
@@ -229,6 +232,9 @@ found can join but need minimum balance
 -->
 <a id="connect" onclick="load();">Connect</a>
 <div id="root">
+  <p id="info"></p>
+  <input id="txtAmt" type="text" /> <a onclick="deposit()">Deposit</a> /
+  <a onclick="withdraw()">Withdraw</a> <br />
   <input id="txtRoom" type="text" /><button onclick="search()">
     Search Room #
   </button>

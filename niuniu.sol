@@ -23,9 +23,6 @@ contract NiuNiu{
     mapping(address=>Player)public player;
     modifier onlyOwner(){require(_owner==msg.sender);_;}
 
-    //kick player when afk? and remove profile.room 
-    //remove player when insufficient balance
-
     constructor(){
         _owner=msg.sender;
         /***************************TESTING VARIABLE***************************/

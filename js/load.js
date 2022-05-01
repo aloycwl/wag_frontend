@@ -1,4 +1,4 @@
-
+var loaded;
 async function loadNFTs() {
   nfts = await contract.PLAYERITEMS(acct[0]).call();
   nfts[7] = new Array();
@@ -124,123 +124,168 @@ async function load() {
       });
       location.reload();
     }
-    _u = 'uint256';
-    _ua = _u + '[]';
-    _s = 'string';
-    _f = 'function';
-    _d = 'address';
-    _b = 'balance';
-    _v = 'view';
-    _p = 'payable';
-    PS = {
-      internalType: _ua,
-      name: '',
-      type: _ua,
-    };
-    PT = {
-      internalType: _u,
-      name: 's',
-      type: _u,
-    };
-    PU = {
-      internalType: _s,
-      name: 'r',
-      type: _s,
-    };
-    PV = {
-      internalType: _u,
-      name: '',
-      type: _u,
-    };
     contract = new web3.Contract(
       [
         {
           inputs: [
-            PT,
             {
-              internalType: _u,
-              name: 'q',
-              type: _u,
+              internalType: 'uint256',
+              name: 'a',
+              type: 'uint256',
             },
-            {
-              internalType: _u,
-              name: 's',
-              type: _u,
-            },
-            PU,
           ],
-          name: 'BREED',
+          name: 'CHECK',
           outputs: [],
-          stateMutability: _p,
-          type: _f,
-        },
-        {
-          inputs: [PT, PU],
-          name: 'MINT',
-          outputs: [],
-          stateMutability: _p,
-          type: _f,
-        },
-        {
-          inputs: [],
-          name: 'count',
-          outputs: [PV],
-          stateMutability: _v,
-          type: _f,
-        },
-        {
-          inputs: [PV],
-          name: 'gen',
-          outputs: [PV, PV],
-          stateMutability: _v,
-          type: _f,
-        },
-        {
-          inputs: [],
-          name: 'getBalance',
-          outputs: [PV],
-          stateMutability: _v,
-          type: _f,
+          stateMutability: 'nonpayable',
+          type: 'function',
         },
         {
           inputs: [
             {
-              internalType: _d,
+              internalType: 'uint256',
               name: 'a',
-              type: _d,
+              type: 'uint256',
             },
           ],
-          name: 'PLAYERITEMS',
-          outputs: [PS, PS, PS, PS, PS, PS, PS],
-          stateMutability: _v,
-          type: _f,
+          name: 'DEAL',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [
+            {
+              internalType: 'uint256',
+              name: 'a',
+              type: 'uint256',
+            },
+          ],
+          name: 'DEPOSIT',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [
+            {
+              internalType: 'uint256',
+              name: 'a',
+              type: 'uint256',
+            },
+            {
+              internalType: 'uint256',
+              name: 'b',
+              type: 'uint256',
+            },
+          ],
+          name: 'JOINROOM',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [
+            {
+              internalType: 'uint256',
+              name: 'a',
+              type: 'uint256',
+            },
+          ],
+          name: 'LEAVEROOM',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [
+            {
+              internalType: 'uint256',
+              name: 'a',
+              type: 'uint256',
+            },
+          ],
+          name: 'WITHDRAW',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [
+            {
+              internalType: 'address',
+              name: '',
+              type: 'address',
+            },
+          ],
+          name: 'player',
+          outputs: [
+            {
+              internalType: 'uint256',
+              name: 'points',
+              type: 'uint256',
+            },
+            {
+              internalType: 'bool',
+              name: 'playing',
+              type: 'bool',
+            },
+            {
+              internalType: 'uint256',
+              name: 'room',
+              type: 'uint256',
+            },
+            {
+              internalType: 'uint256',
+              name: 'balance',
+              type: 'uint256',
+            },
+          ],
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          inputs: [
+            {
+              internalType: 'uint256',
+              name: '',
+              type: 'uint256',
+            },
+          ],
+          name: 'room',
+          outputs: [
+            {
+              internalType: 'uint256',
+              name: 'betSize',
+              type: 'uint256',
+            },
+            {
+              internalType: 'uint256',
+              name: 'balance',
+              type: 'uint256',
+            },
+            {
+              internalType: 'bool',
+              name: 'hidden',
+              type: 'bool',
+            },
+          ],
+          stateMutability: 'view',
+          type: 'function',
         },
       ],
-      '0xD120D29947BCb41812Dc6e7AbA2782E7c8237F36'
+      '0x644F6a31670795Ce67FB8f70118904B308F759Bf'
     );
     contract = contract.methods;
-    contract2 = new web3.Contract(
-      [
-        {
-          constant: true,
-          inputs: [{ name: '_owner', type: _d }],
-          name: _b + 'Of',
-          outputs: [{ name: _b, type: _u }],
-          type: _f,
-        },
-      ],
-      '0x34A85f092877F93584ab9f4fe9aE2FFA8C846B1F'
-    );
+    /*
     d = await contract.gen(1).call();
     count = await contract.count.call().call();
-    owlWallet = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
     $('#mint').append(`${d[1]} / ${d[0]})`);
     $('#name').append(
       `${
         (await contract.getBalance.call().call()) / 1e18
       } balance. Owl Wallet: ${owlWallet}`
     );
-    $('#connect').hide();
+    $('#connect').hide();*/
   } else $('#connect').html('No Metamask');
 }
 async function isWeb3() {
@@ -249,14 +294,11 @@ async function isWeb3() {
       $('#connect').hide();
       $('#root').show();
       if (!loaded) {
-        loadNFTs();
+        //loadNFTs();
         loaded = true;
       }
     } else {
       $('#connect').show();
-      $('#root').hide();
-      $('#name').html(`<b>Whooli Hootie </b>`);
-      $('#mint').html('MINT (');
     }
   });
 }

@@ -23,11 +23,16 @@ contract NiuNiu{
     mapping(address=>Player)public player;
     modifier onlyOwner(){require(_owner==msg.sender);_;}
 
-    //when last user leave room will delete the room
     //kick player when afk? and remove profile.room 
+    //remove player when insufficient balance
 
     constructor(){
         _owner=msg.sender;
+        /***************************TESTING VARIABLE***************************/
+        player[msg.sender].balance=200;
+        player[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2].balance=100;
+        player[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db].balance=300;
+        /***************************TESTING VARIABLE***************************/
     }
 
     function tokenAddress(address a)external onlyOwner{
@@ -45,10 +50,7 @@ contract NiuNiu{
         iWAC.MINT(msg.sender,a);
     }
 
-    function JOINROOM(uint256 a,uint256 b)external{
-        /***************************TESTING VARIABLE***************************/
-        player[msg.sender].balance=200;
-        /***************************TESTING VARIABLE***************************/
+    function JOIN(uint256 a,uint256 b)external{
         require(room[a].players.length<5&&player[msg.sender].room!=a&&a!=0);
         //Available room && not same room && not reserved room
         if(room[a].players.length==0){ //Initiate the room
@@ -61,14 +63,14 @@ contract NiuNiu{
         room[a].players.push(msg.sender); //Add a player
     }
 
-    function LEAVEROOM(uint256 a)external{
-        require(player[msg.sender].room==a);
-        player[msg.sender].room=0;
+    function LEAVE(uint256 a,address b)public{
+        require(player[msg.sender].room==a||msg.sender==_owner);
+        player[b].room=0;
         if(room[a].players.length==1)delete room[a]; //Delete room if no more player
         else{
-            uint256 b; //Move players up
-            for(uint256 i=0;i<room[a].players.length;i++)if(room[a].players[i]==msg.sender)b=i;
-            room[a].players[b]=room[a].players[room[a].players.length-1];
+            uint256 c; //Move players up
+            for(uint256 i=0;i<room[a].players.length;i++)if(room[a].players[i]==msg.sender)c=i;
+            room[a].players[c]=room[a].players[room[a].players.length-1];
             room[a].players.pop();
         }
     }
@@ -117,8 +119,10 @@ contract NiuNiu{
         if(player[room[a].players[i]].points==highest)winnerCount++;
         player[room[a].players[0]].balance+=(room[a].balance*5/100); //5% for host (Maybe safemath issue)
         winnerCount=room[a].balance=room[a].balance*9/10/winnerCount; //Minus 5% for admin and divide winnings
-        for(uint256 i=0;i<room[a].players.length;i++) //Distribute tokens
-        if(player[room[a].players[i]].points==highest)player[room[a].players[i]].balance+=winnerCount;
+        for(uint256 i=0;i<room[a].players.length;i++){ //Distribute tokens
+            if(player[room[a].players[i]].points==highest)player[room[a].players[i]].balance+=winnerCount;
+            if(player[room[a].players[i]].balance<room[a].betSize)LEAVE(a,room[a].players[i]);
+        }
         room[a].balance=0;
     }}
 

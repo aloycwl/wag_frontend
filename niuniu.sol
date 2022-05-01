@@ -101,7 +101,7 @@ contract NiuNiu{
         for(uint256 i=0;i<room[a].players.length;i++) //Number of active players in the room
         if(player[room[a].players[i]].cards[0]>0){ //If player is playing with more than 1 card
             uint256 count;
-            for(uint256 j=0;j<5;j++){ //Reverse for-loop to pop
+            for(uint256 j=0;j<5;j++){ //Go through every cards
                 uint256 c=player[room[a].players[i]].cards[j]%13; //Calculate single card value
                 c==0||c>9?10:c;
                 count+=c;
@@ -122,16 +122,13 @@ contract NiuNiu{
         room[a].balance=0;
     }}
 
-    function testCards(uint256 a)external view returns(uint256[5]memory){
-        return player[room[1].players[a]].cards;
+    function getPlayerCards(uint256 a)external view returns(address[]memory b,
+    uint256[5]memory c,uint256[5]memory d,uint256[5]memory e,uint256[5]memory f,uint256[5]memory g){
+        b=room[a].players; //Only get cards if there is a player
+        if(room[a].players.length>0)c=player[room[a].players[0]].cards;
+        if(room[a].players.length>1)d=player[room[a].players[1]].cards;
+        if(room[a].players.length>2)e=player[room[a].players[2]].cards;
+        if(room[a].players.length>3)f=player[room[a].players[3]].cards;
+        if(room[a].players.length>4)g=player[room[a].players[4]].cards;
     }
-
-    function testPoints(uint256 a)external view returns(uint256){
-        return player[room[1].players[a]].points;
-    }
-
-    function testRooms(uint256 a)external view returns(address[]memory){
-        return room[a].players;
-    }
-
 }

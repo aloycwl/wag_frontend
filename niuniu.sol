@@ -50,7 +50,7 @@ contract NiuNiu{
             require(b>=10); //Bet size must be more than 0
             room[a].betSize=b; //Set the room bet size
         }
-        //require(player[msg.sender].balance>=room[a].betSize);
+        require(player[msg.sender].balance>=room[a].betSize);
         player[msg.sender].playing=true;
         player[msg.sender].room=a; //In case player disconnect
         room[a].players.push(msg.sender); //Add a player

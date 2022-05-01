@@ -246,16 +246,24 @@ async function load() {
 }
 async function search() {
   d = await contract.room($('#txtRoom').val()).call();
-  if (d.playerCount == 0) str = 'Create a new room';
+  if (d.playerCount == 0)
+    str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
   else if (d.playerCount < 5) str = 'Join';
   else str = 'This room is full';
-  $('#searched').html(str);
+  $('#room').html(str);
 }
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
   $('#info').html(`You are in room ${player.room},
   Balance: ${player.balance}, WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
+  if(player.room>0){
+    $('#room').html('go to room');
+    // DEAL
+    // LEAVE
+    // CHECK
+    // display players
+  }
 }
 async function transact(a) {
   $('#info').append(' <i>Waiting for transaction...</i>');
@@ -265,6 +273,22 @@ async function transact(a) {
   });
   refreshInfo();
   $('#txtAmt').val('');
+}
+async function join(a) {
+  b = $('#amt').val();
+  if (a == 0 && b < 10) {
+    $('#room').html('Minimum bet size is 10');
+    return;
+  }
+  if (player.balance < b) {
+    $('#room').html('Insufficent balance');
+    return;
+  }
+  $('#info').append(' <i>Waiting for transaction...</i>');
+  await contract.JOIN($('#txtRoom').val(), b).send({
+    from: acct[0],
+  });
+  refreshInfo();
 }
 async function isWeb3() {
   await web3.getAccounts().then((d) => {

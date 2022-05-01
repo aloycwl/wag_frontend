@@ -245,7 +245,8 @@ async function load() {
   } else $('#connect').html('No Metamask');
 }
 async function search() {
-  d = await contract.room($('#txtRoom').val()).call();
+  rmNum = $('#txtRoom').val();
+  d = await contract.room(rmNum).call();
   if (d.playerCount == 0)
     str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
   else if (d.playerCount < 5) str = 'Join';
@@ -257,16 +258,22 @@ async function refreshInfo() {
   $('#info').html(`You are in room ${player.room},
   Balance: ${player.balance}, WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
-  if(player.room>0){
-    $('#room').html('go to room');
+  $('#room').html('');
+  if (player.room > 0) {
+    room = await contract.room(player.room).call();
+    str = `Room: ${player.room}, Balance: ${room.balance}, Players count: ${room.playerCount} | `;
+    players = await contract.getRoomInfo(player.room).call();
+    if (players.b[0].toLowerCase() == acct[0])
+      str += room.balance > 1 ? 'Deal' : 'Check';
     // DEAL
     // LEAVE
     // CHECK
     // display players
+    $('#room').html(str + ' | <a onclick="leave()">Leave room</a>');
   }
 }
 async function transact(a) {
-  $('#info').append(' <i>Waiting for transaction...</i>');
+  waitTxt();
   c = a == 1 ? contract.DEPOSIT : contract.WITHDRAW;
   await c($('#txtAmt').val()).send({
     from: acct[0],
@@ -275,17 +282,26 @@ async function transact(a) {
   $('#txtAmt').val('');
 }
 async function join(a) {
-  b = $('#amt').val();
+  b = parseInt($('#amt').val());
+  str = '';
   if (a == 0 && b < 10) {
-    $('#room').html('Minimum bet size is 10');
+    str = 'Minimum bet size is 10';
     return;
   }
   if (player.balance < b) {
-    $('#room').html('Insufficent balance');
+    str = 'Insufficent balance';
     return;
   }
-  $('#info').append(' <i>Waiting for transaction...</i>');
-  await contract.JOIN($('#txtRoom').val(), b).send({
+  $('#room').html(str);
+  waitTxt();
+  await contract.JOIN(rmNum, b).send({
+    from: acct[0],
+  });
+  refreshInfo();
+}
+async function leave() {
+  waitTxt();
+  await contract.LEAVE(player.room, acct[0]).send({
     from: acct[0],
   });
   refreshInfo();
@@ -302,6 +318,9 @@ async function isWeb3() {
       $('#connect').show();
     }
   });
+}
+function waitTxt() {
+  $('#info').append(' <i>Waiting for transaction...</i>');
 }
 setInterval(isWeb3, 1000);
 load();

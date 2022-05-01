@@ -8,6 +8,7 @@ contract NiuNiu{
         address[]players; //First player automatically is host
         uint256 betSize;
         uint256 balance;
+        uint256 playerCount;
         bool hidden;
     }
     struct Player{
@@ -42,20 +43,21 @@ contract NiuNiu{
         iWAC.MINT(msg.sender,a);
     }
 
-    function JOIN(uint256 a,uint256 b)external{
-        require(room[a].players.length<5&&player[msg.sender].room!=a&&a!=0);
+    function JOIN(uint256 a,uint256 b)external{unchecked{
+        require(room[a].playerCount<5&&player[msg.sender].room!=a&&a!=0);
         //Available room && not same room && not reserved room
         if(room[a].players.length==0){ //Initiate the room
             require(b>=10); //Bet size must be more than 0
             room[a].betSize=b; //Set the room bet size
         }
-        require(player[msg.sender].balance>=room[a].betSize);
+        //require(player[msg.sender].balance>=room[a].betSize);
         player[msg.sender].playing=true;
         player[msg.sender].room=a; //In case player disconnect
         room[a].players.push(msg.sender); //Add a player
-    }
+        room[a].playerCount++;
+    }}
 
-    function LEAVE(uint256 a,address b)public{
+    function LEAVE(uint256 a,address b)public{unchecked{
         require(player[msg.sender].room==a||msg.sender==_owner);
         player[b].room=0;
         if(room[a].players.length==1)delete room[a]; //Delete room if no more player
@@ -64,8 +66,9 @@ contract NiuNiu{
             for(uint256 i=0;i<room[a].players.length;i++)if(room[a].players[i]==msg.sender)c=i;
             room[a].players[c]=room[a].players[room[a].players.length-1];
             room[a].players.pop();
+            room[a].playerCount--;
         }
-    }
+    }}
 
     function DEAL(uint256 a)external{unchecked{
         require(msg.sender==room[a].players[0]&&room[a].balance==0);

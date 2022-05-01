@@ -123,7 +123,7 @@ contract NiuNiu{
         room[a].balance=0;
     }}
 
-    function getPlayerCards(uint256 a)external view returns(address[]memory b,
+    function getRoomInfo(uint256 a)external view returns(address[]memory b,
     uint256[5]memory c,uint256[5]memory d,uint256[5]memory e,uint256[5]memory f,uint256[5]memory g){
         b=room[a].players; //Only get cards if there is a player
         if(room[a].players.length>0)c=player[room[a].players[0]].cards;

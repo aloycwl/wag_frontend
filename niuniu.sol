@@ -28,9 +28,6 @@ contract NiuNiu{
 
     constructor(){
         _owner=msg.sender;
-        //test
-        player[msg.sender].balance=10;
-        player[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2].balance=20;
     }
 
     function tokenAddress(address a)external onlyOwner{
@@ -49,6 +46,9 @@ contract NiuNiu{
     }
 
     function JOINROOM(uint256 a,uint256 b)external{
+        /***************************TESTING VARIABLE***************************/
+        player[msg.sender].balance=200;
+        /***************************TESTING VARIABLE***************************/
         require(room[a].players.length<5&&player[msg.sender].room!=a&&a!=0);
         //Available room && not same room && not reserved room
         if(room[a].players.length==0){ //Initiate the room

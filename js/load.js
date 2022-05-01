@@ -1,3 +1,5 @@
+//ERC20: 0x039f8E3fC2A81108784c7347d68082a7b694202F
+
 var loaded;
 async function search() {
   d = await contract.room($('#txtRoom').val()).call();
@@ -18,155 +20,210 @@ async function load() {
     contract = new web3.Contract(
       [
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            }
           ],
-          name: 'CHECK',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
+          "name": "CHECK",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            }
           ],
-          name: 'DEAL',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
+          "name": "DEAL",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            }
           ],
-          name: 'DEPOSIT',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
+          "name": "DEPOSIT",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
             },
             {
-              internalType: 'uint256',
-              name: 'b',
-              type: 'uint256',
-            },
+              "internalType": "uint256",
+              "name": "b",
+              "type": "uint256"
+            }
           ],
-          name: 'JOINROOM',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
+          "name": "JOIN",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
             },
+            {
+              "internalType": "address",
+              "name": "b",
+              "type": "address"
+            }
           ],
-          name: 'LEAVEROOM',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
+          "name": "LEAVE",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            }
           ],
-          name: 'WITHDRAW',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
+          "name": "WITHDRAW",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'address',
-              name: '',
-              type: 'address',
-            },
+              "internalType": "uint256",
+              "name": "a",
+              "type": "uint256"
+            }
           ],
-          name: 'player',
-          outputs: [
+          "name": "getRoomInfo",
+          "outputs": [
             {
-              internalType: 'uint256',
-              name: 'points',
-              type: 'uint256',
+              "internalType": "address[]",
+              "name": "b",
+              "type": "address[]"
             },
             {
-              internalType: 'bool',
-              name: 'playing',
-              type: 'bool',
+              "internalType": "uint256[5]",
+              "name": "c",
+              "type": "uint256[5]"
             },
             {
-              internalType: 'uint256',
-              name: 'room',
-              type: 'uint256',
+              "internalType": "uint256[5]",
+              "name": "d",
+              "type": "uint256[5]"
             },
             {
-              internalType: 'uint256',
-              name: 'balance',
-              type: 'uint256',
+              "internalType": "uint256[5]",
+              "name": "e",
+              "type": "uint256[5]"
             },
+            {
+              "internalType": "uint256[5]",
+              "name": "f",
+              "type": "uint256[5]"
+            },
+            {
+              "internalType": "uint256[5]",
+              "name": "g",
+              "type": "uint256[5]"
+            }
           ],
-          stateMutability: 'view',
-          type: 'function',
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
           ],
-          name: 'room',
-          outputs: [
+          "name": "player",
+          "outputs": [
             {
-              internalType: 'uint256',
-              name: 'betSize',
-              type: 'uint256',
+              "internalType": "uint256",
+              "name": "points",
+              "type": "uint256"
             },
             {
-              internalType: 'uint256',
-              name: 'balance',
-              type: 'uint256',
+              "internalType": "bool",
+              "name": "playing",
+              "type": "bool"
             },
             {
-              internalType: 'bool',
-              name: 'hidden',
-              type: 'bool',
+              "internalType": "uint256",
+              "name": "room",
+              "type": "uint256"
             },
+            {
+              "internalType": "uint256",
+              "name": "balance",
+              "type": "uint256"
+            }
           ],
-          stateMutability: 'view',
-          type: 'function',
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "room",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "betSize",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "balance",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "playerCount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "hidden",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         },
       ],
-      '0x644F6a31670795Ce67FB8f70118904B308F759Bf'
+      '0xC1Df3e705b44bFf0A45a0200619092c9c91450Dc'
     );
     contract = contract.methods;
+    d = await contract.player[acct[0]].call();
   } else $('#connect').html('No Metamask');
 }
 async function isWeb3() {

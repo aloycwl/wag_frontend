@@ -1,5 +1,8 @@
 var loaded;
-
+async function search() {
+  d = await contract.room($('#txtRoom').val()).call();
+  $('#searched').html(d.hidden);
+}
 async function load() {
   if (ethereum) {
     web3 = new Web3(ethereum);
@@ -164,7 +167,6 @@ async function load() {
       '0x644F6a31670795Ce67FB8f70118904B308F759Bf'
     );
     contract = contract.methods;
-    console.log(await contract.player(acct[0]).call());
   } else $('#connect').html('No Metamask');
 }
 async function isWeb3() {

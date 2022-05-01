@@ -21,7 +21,6 @@ contract NiuNiu{
     address private _owner;
     mapping(uint256=>Room)public room;
     mapping(address=>Player)public player;
-    modifier onlyOwner(){require(_owner==msg.sender);_;}
 
     constructor(){
         _owner=msg.sender;
@@ -32,7 +31,8 @@ contract NiuNiu{
         /***************************TESTING VARIABLE***************************/
     }
 
-    function tokenAddress(address a)external onlyOwner{
+    function tokenAddress(address a)external{
+        require(_owner==msg.sender);
         iWAC=IWAC(a);
     }
 
@@ -51,7 +51,7 @@ contract NiuNiu{
         require(room[a].players.length<5&&player[msg.sender].room!=a&&a!=0);
         //Available room && not same room && not reserved room
         if(room[a].players.length==0){ //Initiate the room
-            require(b>0); //Bet size must be more than 0
+            require(b>=20); //Bet size must be more than 0
             room[a].betSize=b; //Set the room bet size
         }
         require(player[msg.sender].balance>=room[a].betSize);

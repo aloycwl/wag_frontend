@@ -284,9 +284,11 @@ async function transact(a) {
   $('#txtAmt').val('');
 }
 async function deal(a) {
+  waitTxt();
   await contract.DEAL(player.room).send({
     from: acct[0],
   });
+  refreshInfo();
 }
 async function join(a) {
   b = a == 0 ? parseInt($('#amt').val()) : room.betSize;

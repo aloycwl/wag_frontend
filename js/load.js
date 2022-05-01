@@ -1,8 +1,4 @@
 var loaded;
-async function search() {
-  d = await contract.room($('#txtRoom').val()).call();
-  $('#searched').html(d.hidden);
-}
 async function load() {
   if (ethereum) {
     web3 = new Web3(ethereum);
@@ -248,11 +244,27 @@ async function load() {
     refreshInfo();
   } else $('#connect').html('No Metamask');
 }
+async function search() {
+  d = await contract.room($('#txtRoom').val()).call();
+  if (d.playerCount == 0) str = 'Create a new room';
+  else if (d.playerCount < 5) str = 'Join';
+  else str = 'This room is full';
+  $('#searched').html(str);
+}
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
   $('#info').html(`You are in room ${player.room},
   Balance: ${player.balance}, WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
+}
+async function transact(a) {
+  $('#info').append(' <i>Waiting for transaction...</i>');
+  c = a == 1 ? contract.DEPOSIT : contract.WITHDRAW;
+  await c($('#txtAmt').val()).send({
+    from: acct[0],
+  });
+  refreshInfo();
+  $('#txtAmt').val('');
 }
 async function isWeb3() {
   await web3.getAccounts().then((d) => {
@@ -260,7 +272,6 @@ async function isWeb3() {
       $('#connect').hide();
       $('#root').show();
       if (!loaded) {
-        //loadNFTs();
         loaded = true;
       }
     } else {

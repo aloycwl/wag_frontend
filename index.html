@@ -6,6 +6,9 @@
   a {
     cursor: pointer;
   }
+  .hide {
+    display: none;
+  }
   .cards {
     background-image: url('https://aloycwl.github.io/casino/img/cardset.png');
     display: inline-block;
@@ -226,15 +229,11 @@
 <p class="cards c51"></p>
 <p class="cards c52"></p>
 <br />
-<!-- search room
-not found can create but need at least 20 token as min bet
-found can join but need minimum balance
--->
 <a id="connect" onclick="load();">Connect</a>
-<div id="root">
+<div id="root" class="hide">
   <p id="info"></p>
-  <input id="txtAmt" type="text" /> <a onclick="deposit()">Deposit</a> /
-  <a onclick="withdraw()">Withdraw</a> <br />
+  <input id="txtAmt" type="number" /> <a onclick="transact(1)">Deposit</a> /
+  <a onclick="transact(0)">Withdraw</a> <br />
   <input id="txtRoom" type="text" /><button onclick="search()">
     Search Room #
   </button>

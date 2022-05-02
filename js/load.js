@@ -239,7 +239,7 @@ async function load() {
           type: 'function',
         },
       ],
-      '0x039f8E3fC2A81108784c7347d68082a7b694202F'
+      '0x0CAEae45adbd8494DE319E7d155d76B6A47BF1e9'
     );
     refreshInfo();
   } else $('#connect').html('No Metamask');

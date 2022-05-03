@@ -300,7 +300,7 @@ async function deal() {
   ($('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK)(
     player.room
   ).send({ from: acct[0] });
-  refreshInfo();
+  //refreshInfo();
 }
 async function join(a) {
   b = a == 0 ? parseInt($('#amt').val()) : room.betSize;

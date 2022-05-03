@@ -59,7 +59,7 @@ async function deal() {
   ).send(frm);
 }
 async function join(a) {
-  b = a == 0 ? parseInt($('#amt').val()) : room.betSize;
+  b = a == 0 ? parseInt($('#amt').val()) : rm.betSize;
   str = '';
   if (a == 0 && b < 10) str = 'Minimum bet size is 10';
   if (player.balance < b) str = 'Insufficent balance';
@@ -82,8 +82,8 @@ async function isWeb3() {
       $('#connect').hide();
       $('#root').show();
       if (player.room > 0)
-        if (room.balance == balance || room.playerCount == playerCount)
-          room = await contract.room(player.room).call();
+        if (rm.balance == balance || rm.playerCount == playerCount)
+          rm = await contract.room(player.room).call();
         else refreshInfo();
     } else $('#connect').show();
   } else $('#connect').html('No Metamask');
@@ -212,27 +212,27 @@ async function load() {
             },
             {
               internalType: 'uint256[5]',
-              name: 'c',
+              name: '',
               type: 'uint256[5]',
             },
             {
               internalType: 'uint256[5]',
-              name: 'd',
+              name: '',
               type: 'uint256[5]',
             },
             {
               internalType: 'uint256[5]',
-              name: 'e',
+              name: '',
               type: 'uint256[5]',
             },
             {
               internalType: 'uint256[5]',
-              name: 'f',
+              name: '',
               type: 'uint256[5]',
             },
             {
               internalType: 'uint256[5]',
-              name: 'g',
+              name: '',
               type: 'uint256[5]',
             },
           ],

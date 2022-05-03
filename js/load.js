@@ -1,6 +1,6 @@
 var balance;
 async function load() {
-  if (ethereum) {
+  if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
     web3 = web3.eth;
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
@@ -311,16 +311,18 @@ async function leave() {
   refreshInfo();
 }
 async function isWeb3() {
-  await web3.getAccounts().then((d) => {
-    if (d.length > 0) {
-      $('#connect').hide();
-      $('#root').show();
-      //Check for balance here
-      //await
-    } else {
-      $('#connect').show();
-    }
-  });
+  if (typeof ethereum != 'undefined') {
+    await web3.getAccounts().then((d) => {
+      if (d.length > 0) {
+        $('#connect').hide();
+        $('#root').show();
+        //Check for balance here
+        //await
+      } else {
+        $('#connect').show();
+      }
+    });
+  }
 }
 function waitTxt() {
   $('#info').append(' <i>Waiting for transaction...</i>');

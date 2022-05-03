@@ -1,192 +1,200 @@
-<script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
-<script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-<script src="js/load.js"></script>
-
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  a {
-    cursor: pointer;
-    background-color: #ffffe0;
-  }
-  .hide {
-    display: none;
-  }
-  .table {
-    background-color: #eeeeee;
-    display: inline-block;
-    padding: 5;
-    text-align: center;
-  }
-  .cards {
-    background-image: url('https://aloycwl.github.io/wag_frontend/img/cardset.png');
-    display: inline-block;
-    height: 60px;
-    width: 40px;
-  }
-  .c1 {
-    background-position: -1px -142px;
-  }
-  .c2 {
-    background-position: -51px -142px;
-  }
-  .c3 {
-    background-position: -101px -142px;
-  }
-  .c4 {
-    background-position: -151px -142px;
-  }
-  .c5 {
-    background-position: -201px -142px;
-  }
-  .c6 {
-    background-position: -251px -142px;
-  }
-  .c7 {
-    background-position: -301px -142px;
-  }
-  .c8 {
-    background-position: -351px -142px;
-  }
-  .c9 {
-    background-position: -401px -142px;
-  }
-  .c10 {
-    background-position: -451px -142px;
-  }
-  .c11 {
-    background-position: -501px -142px;
-  }
-  .c12 {
-    background-position: -551px -142px;
-  }
-  .c13 {
-    background-position: -601px -142px;
-  }
-  .c14 {
-    background-position: -1px -72px;
-  }
-  .c15 {
-    background-position: -51px -72px;
-  }
-  .c16 {
-    background-position: -101px -72px;
-  }
-  .c17 {
-    background-position: -151px -72px;
-  }
-  .c18 {
-    background-position: -201px -72px;
-  }
-  .c19 {
-    background-position: -251px -72px;
-  }
-  .c20 {
-    background-position: -301px -72px;
-  }
-  .c21 {
-    background-position: -351px -72px;
-  }
-  .c22 {
-    background-position: -401px -72px;
-  }
-  .c23 {
-    background-position: -451px -72px;
-  }
-  .c24 {
-    background-position: -501px -72px;
-  }
-  .c25 {
-    background-position: -551px -72px;
-  }
-  .c26 {
-    background-position: -601px -72px;
-  }
-  .c27 {
-    background-position: -1px -212px;
-  }
-  .c28 {
-    background-position: -51px -212px;
-  }
-  .c29 {
-    background-position: -101px -212px;
-  }
-  .c30 {
-    background-position: -151px -212px;
-  }
-  .c31 {
-    background-position: -201px -212px;
-  }
-  .c32 {
-    background-position: -251px -212px;
-  }
-  .c33 {
-    background-position: -301px -212px;
-  }
-  .c34 {
-    background-position: -351px -212px;
-  }
-  .c35 {
-    background-position: -401px -212px;
-  }
-  .c36 {
-    background-position: -451px -212px;
-  }
-  .c37 {
-    background-position: -501px -212px;
-  }
-  .c38 {
-    background-position: -551px -212px;
-  }
-  .c39 {
-    background-position: -601px -212px;
-  }
-  .c40 {
-    background-position: -1px -2px;
-  }
-  .c41 {
-    background-position: -51px -2px;
-  }
-  .c42 {
-    background-position: -101px -2px;
-  }
-  .c43 {
-    background-position: -151px -2px;
-  }
-  .c44 {
-    background-position: -201px -2px;
-  }
-  .c45 {
-    background-position: -251px -2px;
-  }
-  .c46 {
-    background-position: -301px -2px;
-  }
-  .c47 {
-    background-position: -351px -2px;
-  }
-  .c48 {
-    background-position: -401px -2px;
-  }
-  .c49 {
-    background-position: -451px -2px;
-  }
-  .c50 {
-    background-position: -501px -2px;
-  }
-  .c51 {
-    background-position: -551px -2px;
-  }
-  .c52 {
-    background-position: -601px -2px;
-  }
-</style>
-<a id="connect" onclick="load();">Connect</a>
-<div id="root" class="hide">
-  <p id="info"></p>
-  <input id="txtAmt" type="number" /> <a onclick="transact(1)">Deposit</a> |
-  <a onclick="transact(0)">Withdraw</a> <br />
-  <p id="room"></p>
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Wooing Club (TWC)</title>
+    <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
+    <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
+    <script src="js/load.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      a {
+        cursor: pointer;
+        background-color: #ffffe0;
+      }
+      .hide {
+        display: none;
+      }
+      .table {
+        background-color: #eeeeee;
+        display: inline-block;
+        padding: 5;
+        text-align: center;
+      }
+      .cards {
+        background-image: url('https://aloycwl.github.io/wag_frontend/img/cardset.png');
+        display: inline-block;
+        height: 60px;
+        width: 40px;
+      }
+      .c1 {
+        background-position: -1px -142px;
+      }
+      .c2 {
+        background-position: -51px -142px;
+      }
+      .c3 {
+        background-position: -101px -142px;
+      }
+      .c4 {
+        background-position: -151px -142px;
+      }
+      .c5 {
+        background-position: -201px -142px;
+      }
+      .c6 {
+        background-position: -251px -142px;
+      }
+      .c7 {
+        background-position: -301px -142px;
+      }
+      .c8 {
+        background-position: -351px -142px;
+      }
+      .c9 {
+        background-position: -401px -142px;
+      }
+      .c10 {
+        background-position: -451px -142px;
+      }
+      .c11 {
+        background-position: -501px -142px;
+      }
+      .c12 {
+        background-position: -551px -142px;
+      }
+      .c13 {
+        background-position: -601px -142px;
+      }
+      .c14 {
+        background-position: -1px -72px;
+      }
+      .c15 {
+        background-position: -51px -72px;
+      }
+      .c16 {
+        background-position: -101px -72px;
+      }
+      .c17 {
+        background-position: -151px -72px;
+      }
+      .c18 {
+        background-position: -201px -72px;
+      }
+      .c19 {
+        background-position: -251px -72px;
+      }
+      .c20 {
+        background-position: -301px -72px;
+      }
+      .c21 {
+        background-position: -351px -72px;
+      }
+      .c22 {
+        background-position: -401px -72px;
+      }
+      .c23 {
+        background-position: -451px -72px;
+      }
+      .c24 {
+        background-position: -501px -72px;
+      }
+      .c25 {
+        background-position: -551px -72px;
+      }
+      .c26 {
+        background-position: -601px -72px;
+      }
+      .c27 {
+        background-position: -1px -212px;
+      }
+      .c28 {
+        background-position: -51px -212px;
+      }
+      .c29 {
+        background-position: -101px -212px;
+      }
+      .c30 {
+        background-position: -151px -212px;
+      }
+      .c31 {
+        background-position: -201px -212px;
+      }
+      .c32 {
+        background-position: -251px -212px;
+      }
+      .c33 {
+        background-position: -301px -212px;
+      }
+      .c34 {
+        background-position: -351px -212px;
+      }
+      .c35 {
+        background-position: -401px -212px;
+      }
+      .c36 {
+        background-position: -451px -212px;
+      }
+      .c37 {
+        background-position: -501px -212px;
+      }
+      .c38 {
+        background-position: -551px -212px;
+      }
+      .c39 {
+        background-position: -601px -212px;
+      }
+      .c40 {
+        background-position: -1px -2px;
+      }
+      .c41 {
+        background-position: -51px -2px;
+      }
+      .c42 {
+        background-position: -101px -2px;
+      }
+      .c43 {
+        background-position: -151px -2px;
+      }
+      .c44 {
+        background-position: -201px -2px;
+      }
+      .c45 {
+        background-position: -251px -2px;
+      }
+      .c46 {
+        background-position: -301px -2px;
+      }
+      .c47 {
+        background-position: -351px -2px;
+      }
+      .c48 {
+        background-position: -401px -2px;
+      }
+      .c49 {
+        background-position: -451px -2px;
+      }
+      .c50 {
+        background-position: -501px -2px;
+      }
+      .c51 {
+        background-position: -551px -2px;
+      }
+      .c52 {
+        background-position: -601px -2px;
+      }
+    </style>
+  </head>
+  <body>
+    <a id="connect" onclick="load();">Connect</a>
+    <div id="root" class="hide">
+      <p id="info"></p>
+      <input id="txtAmt" type="number" /> <a onclick="transact(1)">Deposit</a> |
+      <a onclick="transact(0)">Withdraw</a> <br />
+      <p id="room"></p>
+    </div>
+  </body>
+</html>

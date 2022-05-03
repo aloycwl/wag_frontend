@@ -14,11 +14,11 @@ async function refreshInfo() {
   $('#info').html(`You are in room ${player.room},
   Balance: ${player.balance}, WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
+  rm = await contract.room(player.room).call();
+  players = await contract.getRoomInfo(player.room).call();
+  balance = rm.balance;
+  playerCount = rm.playerCount;
   if (player.room > 0) {
-    rm = await contract.room(player.room).call();
-    players = await contract.getRoomInfo(player.room).call();
-    balance = rm.balance;
-    playerCount = rm.playerCount;
     dealt = rm.balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
     str = `Room#${player.room} | ${rm.balance}-Balance | ${

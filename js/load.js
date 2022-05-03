@@ -260,16 +260,17 @@ async function refreshInfo() {
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   if (player.room > 0) {
     room = await contract.room(player.room).call();
-    balance = room.balance;
-    str = `Room #${player.room} _ ${room.balance} Balance _ ${room.playerCount} Players`;
     players = await contract.getRoomInfo(player.room).call();
+    balance = room.balance;
     dealt = room.balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
-    str += `${
+    str = `Room#${player.room} | ${room.balance}-Balance | ${
+      room.playerCount
+    }-Players${
       host
-        ? ` _ <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
+        ? ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
         : ``
-    } _ <a onclick="leave()">Leave room</a><br>`;
+    } | <a onclick="leave()">Leave</a><br>`;
     if (dealt) {
       p = players[0];
       for (i = 0; i < p.length; i++) {
@@ -326,7 +327,7 @@ async function isWeb3() {
       $('#root').show();
       if (room.balance == balance)
         room = await contract.room(player.room).call();
-      //else refreshInfo();
+      else refreshInfo();
     } else $('#connect').show();
   } else $('#connect').html('No Metamask');
 }

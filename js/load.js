@@ -264,7 +264,6 @@ async function refreshInfo() {
     players = await contract.getRoomInfo(player.room).call();
     if (players.b[0].toLowerCase() == acct[0])
       str += room.balance < 1 ? '<a onclick="deal()">Deal</a>' : 'Check';
-    // DEAL
     // LEAVE
     // CHECK
     // display players
@@ -293,20 +292,16 @@ async function deal(a) {
 async function join(a) {
   b = a == 0 ? parseInt($('#amt').val()) : room.betSize;
   str = '';
-  if (a == 0 && b < 10) {
-    str = 'Minimum bet size is 10';
-    return;
-  }
-  if (player.balance < b) {
-    str = 'Insufficent balance';
-    return;
-  }
+  if (a == 0 && b < 10) str = 'Minimum bet size is 10';
+  if (player.balance < b) str = 'Insufficent balance';
   $('#room').html(str);
-  waitTxt();
-  await contract.JOIN(rmNum, b).send({
-    from: acct[0],
-  });
-  refreshInfo();
+  if (str == '') {
+    waitTxt();
+    await contract.JOIN(rmNum, b).send({
+      from: acct[0],
+    });
+    refreshInfo();
+  }
 }
 async function leave() {
   waitTxt();

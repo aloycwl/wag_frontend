@@ -1,4 +1,5 @@
-var balance = 0;
+var balance = 0,
+  playerCount = 0;
 async function load() {
   if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
@@ -262,6 +263,7 @@ async function refreshInfo() {
     room = await contract.room(player.room).call();
     players = await contract.getRoomInfo(player.room).call();
     balance = room.balance;
+    playerCount = room.playerCount;
     dealt = room.balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
     str = `Room#${player.room} | ${room.balance}-Balance | ${
@@ -300,7 +302,6 @@ async function deal() {
   ($('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK)(
     player.room
   ).send({ from: acct[0] });
-  //refreshInfo();
 }
 async function join(a) {
   b = a == 0 ? parseInt($('#amt').val()) : room.betSize;
@@ -325,7 +326,7 @@ async function isWeb3() {
     if (d.length > 0) {
       $('#connect').hide();
       $('#root').show();
-      if (room.balance == balance)
+      if (room.balance == balance || room.playerCount == playerCount)
         room = await contract.room(player.room).call();
       else refreshInfo();
     } else $('#connect').show();

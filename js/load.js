@@ -242,7 +242,7 @@ async function load() {
       '0x613Fe13FEE32E4aA8f6C2FB290816A24D6371164'
     );
     refreshInfo();
-  } else $('#connect').html('No Metamask');
+  }
 }
 async function search() {
   rmNum = $('#txtRoom').val();
@@ -320,7 +320,7 @@ async function isWeb3() {
         //await
       } else $('#connect').show();
     });
-  }
+  } else $('#connect').html('No Metamask');
 }
 function waitTxt() {
   $('#info').append(' <i>Waiting for transaction...</i>');

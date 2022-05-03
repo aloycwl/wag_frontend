@@ -260,14 +260,25 @@ async function refreshInfo() {
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   if (player.room > 0) {
     room = await contract.room(player.room).call();
-    str = `Room: ${player.room}, Balance: ${room.balance}, Players count: ${room.playerCount} | `;
+    str = `Room #${player.room} | ${room.balance} Balance | ${room.playerCount} Players`;
     players = await contract.getRoomInfo(player.room).call();
-    if (players.b[0].toLowerCase() == acct[0])
-      str += room.balance < 1 ? '<a onclick="deal()">Deal</a>' : 'Check';
-    // LEAVE
-    // CHECK
-    // display players
-    $('#room').html(str + ' | <a onclick="leave()">Leave room</a>');
+    dealt = room.balance > 0;
+    host = players.b[0].toLowerCase() == acct[0];
+    if (host)
+      str += ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`;
+    str += ` | <a onclick="leave()">Leave room</a><br>`;
+    if (dealt) {
+      p = players[0];
+      for (i = 0; i < p.length; i++) {
+        str += `<div class="table">0x${p[i].substring(38)}<i>
+        ${p[i].toLowerCase() == acct[0] ? 'You' : ''}
+        ${host ? 'Host' : ''}</i><br>`;
+        for (j = 0; j < 5; j++)
+          str += `<p class="cards c${players[i + 1][j]}"></p>`;
+        str += '</div>';
+      }
+    }
+    $('#room').html(str);
   } else
     $('#room').html(
       '<input id="txtRoom"type="text"><button onclick="search()">Search Room #</button>'
@@ -282,9 +293,10 @@ async function transact(a) {
   refreshInfo();
   $('#txtAmt').val('');
 }
-async function deal(a) {
+async function deal() {
   waitTxt();
-  await contract.DEAL(player.room).send({
+  c = $('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK;
+  await c(player.room).send({
     from: acct[0],
   });
   refreshInfo();
@@ -323,7 +335,7 @@ async function isWeb3() {
   } else $('#connect').html('No Metamask');
 }
 function waitTxt() {
-  $('#info').append(' <i>Waiting for transaction...</i>');
+  $('#info').html(' <i>Waiting for transaction...</i>');
 }
 setInterval(isWeb3, 1000);
 load();

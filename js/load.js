@@ -318,9 +318,7 @@ async function isWeb3() {
         $('#root').show();
         //Check for balance here
         //await
-      } else {
-        $('#connect').show();
-      }
+      } else $('#connect').show();
     });
   }
 }

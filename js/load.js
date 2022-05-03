@@ -1,4 +1,4 @@
-var loaded;
+var balance;
 async function load() {
   if (ethereum) {
     web3 = new Web3(ethereum);
@@ -214,7 +214,7 @@ async function load() {
           type: 'function',
         },
       ],
-      '0xC1Df3e705b44bFf0A45a0200619092c9c91450Dc'
+      '0x80BB34c189D43C6c3b3FB8B7921A6A389Ed92198'
     );
     contract = contract.methods;
     contract2 = new web3.Contract(
@@ -239,7 +239,7 @@ async function load() {
           type: 'function',
         },
       ],
-      '0x0CAEae45adbd8494DE319E7d155d76B6A47BF1e9'
+      '0x613Fe13FEE32E4aA8f6C2FB290816A24D6371164'
     );
     refreshInfo();
   } else $('#connect').html('No Metamask');
@@ -320,9 +320,8 @@ async function isWeb3() {
     if (d.length > 0) {
       $('#connect').hide();
       $('#root').show();
-      if (!loaded) {
-        loaded = true;
-      }
+      //Check for balance here
+      //await
     } else {
       $('#connect').show();
     }

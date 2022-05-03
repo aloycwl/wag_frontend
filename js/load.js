@@ -260,13 +260,13 @@ async function refreshInfo() {
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   if (player.room > 0) {
     room = await contract.room(player.room).call();
-    str = `Room #${player.room} | ${room.balance} Balance | ${room.playerCount} Players`;
+    str = `Room #${player.room} _ ${room.balance} Balance _ ${room.playerCount} Players`;
     players = await contract.getRoomInfo(player.room).call();
     dealt = room.balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
     if (host)
-      str += ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`;
-    str += ` | <a onclick="leave()">Leave room</a><br>`;
+      str += ` _ <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`;
+    str += ` _ <a onclick="leave()">Leave room</a><br>`;
     if (dealt) {
       p = players[0];
       for (i = 0; i < p.length; i++) {
@@ -278,27 +278,24 @@ async function refreshInfo() {
         str += '</div>';
       }
     }
-    $('#room').html(str);
   } else
-    $('#room').html(
-      '<input id="txtRoom"type="text"><button onclick="search()">Search Room #</button>'
-    );
+    str =
+      '<input id="txtRoom"type="text"><button onclick="search()">Search Room #</button>';
+  $('#room').html(str);
 }
 async function transact(a) {
   waitTxt();
-  c = a == 1 ? contract.DEPOSIT : contract.WITHDRAW;
-  await c($('#txtAmt').val()).send({
-    from: acct[0],
-  });
+  await (a == 1 ? contract.DEPOSIT : contract.WITHDRAW)(
+    $('#txtAmt').val()
+  ).send({ from: acct[0] });
   refreshInfo();
   $('#txtAmt').val('');
 }
 async function deal() {
   waitTxt();
-  c = $('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK;
-  await c(player.room).send({
-    from: acct[0],
-  });
+  await ($('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK)(
+    player.room
+  ).send({ from: acct[0] });
   refreshInfo();
 }
 async function join(a) {
@@ -309,17 +306,13 @@ async function join(a) {
   $('#room').html(str);
   if (str == '') {
     waitTxt();
-    await contract.JOIN(rmNum, b).send({
-      from: acct[0],
-    });
+    await contract.JOIN(rmNum, b).send({ from: acct[0] });
     refreshInfo();
   }
 }
 async function leave() {
   waitTxt();
-  await contract.LEAVE(player.room, acct[0]).send({
-    from: acct[0],
-  });
+  await contract.LEAVE(player.room, acct[0]).send({ from: acct[0] });
   refreshInfo();
 }
 async function isWeb3() {

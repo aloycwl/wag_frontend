@@ -1,10 +1,103 @@
 var balance = 0,
   playerCount = 0;
+async function search() {
+  rmNum = $('#txtRoom').val();
+  d = await contract.room(rmNum).call();
+  if (d.playerCount == 0)
+    str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
+  else if (d.playerCount < 5) str = 'Join';
+  else str = 'This room is full';
+  $('#room').html(str);
+}
+async function refreshInfo() {
+  player = await contract.player(acct[0]).call();
+  $('#info').html(`You are in room ${player.room},
+  Balance: ${player.balance}, WAC tokens:
+  ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
+  if (player.room > 0) {
+    rm = await contract.room(player.room).call();
+    players = await contract.getRoomInfo(player.room).call();
+    balance = rm.balance;
+    playerCount = rm.playerCount;
+    dealt = rm.balance > 0;
+    host = players.b[0].toLowerCase() == acct[0];
+    str = `Room#${player.room} | ${rm.balance}-Balance | ${
+      rm.playerCount
+    }-Players${
+      host
+        ? ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
+        : ``
+    } | <a onclick="leave()">Leave</a><br>`;
+    if (dealt) {
+      p = players[0];
+      for (i = 0; i < p.length; i++) {
+        str += `<div class="table">0x${p[i].substring(38)}<i>
+        ${p[i].toLowerCase() == acct[0] ? 'You' : ''}
+        ${host ? 'Host' : ''}</i><br>`;
+        for (j = 0; j < 5; j++)
+          str += `<p class="cards c${players[i + 1][j]}"></p>`;
+        str += '</div>';
+      }
+    }
+  } else
+    str =
+      '<input id="txtRoom"><button onclick="search()">Search Room #</button>';
+  $('#room').html(str);
+}
+async function transact(a) {
+  waitTxt();
+  await (a == 1 ? contract.DEPOSIT : contract.WITHDRAW)(
+    $('#txtAmt').val()
+  ).send(frm);
+  refreshInfo();
+  $('#txtAmt').val('');
+}
+async function deal() {
+  waitTxt();
+  ($('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK)(
+    player.room
+  ).send(frm);
+}
+async function join(a) {
+  b = a == 0 ? parseInt($('#amt').val()) : room.betSize;
+  str = '';
+  if (a == 0 && b < 10) str = 'Minimum bet size is 10';
+  if (player.balance < b) str = 'Insufficent balance';
+  $('#room').html(str);
+  if (str == '') {
+    waitTxt();
+    await contract.JOIN(rmNum, b).send(frm);
+    refreshInfo();
+  }
+}
+async function leave() {
+  waitTxt();
+  await contract.LEAVE(player.room, acct[0]).send(frm);
+  refreshInfo();
+}
+async function isWeb3() {
+  if (typeof ethereum != 'undefined') {
+    d = await web3.getAccounts();
+    if (d.length > 0) {
+      $('#connect').hide();
+      $('#root').show();
+      if (player.room > 0)
+        if (room.balance == balance || room.playerCount == playerCount)
+          room = await contract.room(player.room).call();
+        else refreshInfo();
+    } else $('#connect').show();
+  } else $('#connect').html('No Metamask');
+}
+function waitTxt() {
+  $('#info').html(' <i>Waiting for transaction...</i>');
+}
+setInterval(isWeb3, 1000);
 async function load() {
   if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
     web3 = web3.eth;
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
+    frm = { from: acct[0], gas: 21e5 };
     if ((await web3.net.getId()) != 4) {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -245,95 +338,4 @@ async function load() {
     refreshInfo();
   }
 }
-async function search() {
-  rmNum = $('#txtRoom').val();
-  d = await contract.room(rmNum).call();
-  if (d.playerCount == 0)
-    str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
-  else if (d.playerCount < 5) str = 'Join';
-  else str = 'This room is full';
-  $('#room').html(str);
-}
-async function refreshInfo() {
-  player = await contract.player(acct[0]).call();
-  $('#info').html(`You are in room ${player.room},
-  Balance: ${player.balance}, WAC tokens:
-  ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
-  if (player.room > 0) {
-    room = await contract.room(player.room).call();
-    players = await contract.getRoomInfo(player.room).call();
-    balance = room.balance;
-    playerCount = room.playerCount;
-    dealt = room.balance > 0;
-    host = players.b[0].toLowerCase() == acct[0];
-    str = `Room#${player.room} | ${room.balance}-Balance | ${
-      room.playerCount
-    }-Players${
-      host
-        ? ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
-        : ``
-    } | <a onclick="leave()">Leave</a><br>`;
-    if (dealt) {
-      p = players[0];
-      for (i = 0; i < p.length; i++) {
-        str += `<div class="table">0x${p[i].substring(38)}<i>
-        ${p[i].toLowerCase() == acct[0] ? 'You' : ''}
-        ${host ? 'Host' : ''}</i><br>`;
-        for (j = 0; j < 5; j++)
-          str += `<p class="cards c${players[i + 1][j]}"></p>`;
-        str += '</div>';
-      }
-    }
-  } else
-    str =
-      '<input id="txtRoom"><button onclick="search()">Search Room #</button>';
-  $('#room').html(str);
-}
-async function transact(a) {
-  waitTxt();
-  await (a == 1 ? contract.DEPOSIT : contract.WITHDRAW)(
-    $('#txtAmt').val()
-  ).send({ from: acct[0] });
-  refreshInfo();
-  $('#txtAmt').val('');
-}
-async function deal() {
-  waitTxt();
-  ($('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK)(
-    player.room
-  ).send({ from: acct[0] });
-}
-async function join(a) {
-  b = a == 0 ? parseInt($('#amt').val()) : room.betSize;
-  str = '';
-  if (a == 0 && b < 10) str = 'Minimum bet size is 10';
-  if (player.balance < b) str = 'Insufficent balance';
-  $('#room').html(str);
-  if (str == '') {
-    waitTxt();
-    await contract.JOIN(rmNum, b).send({ from: acct[0] });
-    refreshInfo();
-  }
-}
-async function leave() {
-  waitTxt();
-  await contract.LEAVE(player.room, acct[0]).send({ from: acct[0] });
-  refreshInfo();
-}
-async function isWeb3() {
-  if (typeof ethereum != 'undefined') {
-    d = await web3.getAccounts();
-    if (d.length > 0) {
-      $('#connect').hide();
-      $('#root').show();
-      if (room.balance == balance || room.playerCount == playerCount)
-        room = await contract.room(player.room).call();
-      else refreshInfo();
-    } else $('#connect').show();
-  } else $('#connect').html('No Metamask');
-}
-function waitTxt() {
-  $('#info').html(' <i>Waiting for transaction...</i>');
-}
-setInterval(isWeb3, 1000);
 load();

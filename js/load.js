@@ -5,7 +5,7 @@ async function search() {
   d = await contract.room(rmNum).call();
   if (d.playerCount == 0)
     str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
-  else if (d.playerCount < 5) str = 'Join';
+  else if (d.playerCount < 5) str = '<a onclick="join(1)">Join</a>';
   else str = 'This room is full';
   $('#room').html(str);
 }

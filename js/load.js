@@ -11,12 +11,12 @@ async function search() {
 }
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
-  $('#info').html(`You are in room ${player.room},
-  Balance: ${player.balance}, WAC tokens:
-  ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   rm = await contract.room(player.room).call();
   balance = rm.balance;
   playerCount = rm.playerCount;
+  $('#info').html(`You are in room ${player.room},
+  Balance: ${player.balance}, WAC tokens:
+  ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   if (player.room > 0) {
     players = await contract.getRoomInfo(player.room).call();
     dealt = rm.balance > 0;
@@ -41,16 +41,18 @@ async function refreshInfo() {
     }
   } else
     str =
-      '<input id="txtRoom"><button onclick="search()">Search Room #</button>';
+      '<input id="txtRoom"placeholder="Room Number"><button onclick="search()">Search Room #</button>';
   $('#room').html(str);
 }
 async function transact(a) {
-  waitTxt();
-  await (a == 1 ? contract.DEPOSIT : contract.WITHDRAW)(
-    $('#txtAmt').val()
-  ).send(frm);
-  refreshInfo();
-  $('#txtAmt').val('');
+  if ($('#txtAmt').val() > 0) {
+    waitTxt();
+    await (a == 1 ? contract.DEPOSIT : contract.WITHDRAW)(
+      $('#txtAmt').val()
+    ).send(frm);
+    refreshInfo();
+    $('#txtAmt').val('');
+  }
 }
 async function deal() {
   waitTxt();
@@ -81,10 +83,8 @@ async function isWeb3() {
     if (d.length > 0) {
       $('#connect').hide();
       $('#root').show();
-      if (player.room > 0)
-        if (rm.balance == balance || rm.playerCount == playerCount)
-          rm = await contract.room(player.room).call();
-        else refreshInfo();
+      rm = await contract.room(player.room).call();
+      if (rm.balance != balance || rm.playerCount != playerCount) refreshInfo();
     } else $('#connect').show();
   } else $('#connect').html('No Metamask');
 }

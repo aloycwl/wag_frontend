@@ -338,4 +338,10 @@ async function load() {
     refreshInfo();
   }
 }
+for (i = 1; i < 53; i++) {
+  x = -1;
+  y = -142;
+  $('.c' + i).css('background-position', x+' '+y);
+}
+
 load();

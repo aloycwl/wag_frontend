@@ -43,6 +43,15 @@ async function refreshInfo() {
     str =
       '<input id="txtRoom"placeholder="Room Number"><button onclick="search()">Search Room #</button>';
   $('#room').html(str);
+  x = -1;
+  y = -142;
+  for (i = 0; i < 52; i++) {
+    $('.c' + i).css('background-position', x + 'px ' + y + 'px');
+    if ((i + 1) % 13 == 0) {
+      x = -1;
+      y = i == 25 ? -212 : i == 38 ? -2 : -72;
+    } else x -= 50;
+  }
 }
 async function transact(a) {
   if ($('#txtAmt').val() > 0) {
@@ -341,7 +350,6 @@ async function load() {
 for (i = 1; i < 53; i++) {
   x = -1;
   y = -142;
-  $('.c' + i).css('background-position', x+' '+y);
+  $('.c' + i).css('background-position', x + ' ' + y);
 }
-
 load();

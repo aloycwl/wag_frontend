@@ -1,14 +1,5 @@
 var balance = 0,
   playerCount = 0;
-async function search() {
-  rmNum = $('#txtRoom').val();
-  d = await contract.room(rmNum).call();
-  if (d.playerCount == 0)
-    str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
-  else if (d.playerCount < 5) str = '<a onclick="join(1)">Join</a>';
-  else str = 'This room is full';
-  $('#room').html(str);
-}
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
   rm = await contract.room(player.room).call();
@@ -19,11 +10,9 @@ async function refreshInfo() {
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   if (player.room > 0) {
     players = await contract.getRoomInfo(player.room).call();
-    dealt = rm.balance > 0;
+    dealt = balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
-    str = `Room#${player.room} | ${rm.balance}-Balance | ${
-      rm.playerCount
-    }-Players${
+    str = `Room#${player.room} | ${balance}-Balance | ${playerCount}-Players${
       host
         ? ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
         : ``
@@ -39,9 +28,18 @@ async function refreshInfo() {
         str += '</div>';
       }
     }
-  } else
+  } else {
     str =
       '<input id="txtRoom"placeholder="Room Number"><button onclick="search()">Search Room #</button>';
+    $('#rooms').show();
+    for (i = 1; i < 13; i++) {
+      rm = await contract.room(i).call();
+      $('#rooms').append(
+        `<div class="tables"><b>Room ${i}</b><br>Balance: ${rm.balance}<br>Bet size: 
+        ${rm.betSize}<br>Players: ${rm.playerCount}<br><a onclick="$('#txtRoom').val(${i});window.search();">Explore</a></div>`
+      );
+    }
+  }
   $('#room').html(str);
   x = -1;
   y = -142;
@@ -52,6 +50,15 @@ async function refreshInfo() {
       y = i == 25 ? -212 : i == 38 ? -2 : -72;
     } else x -= 50;
   }
+}
+async function search() {
+  rmNum = $('#txtRoom').val();
+  d = await contract.room(rmNum).call();
+  if (d.playerCount == 0)
+    str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
+  else if (d.playerCount < 5) str = '<a onclick="join(1)">Join</a>';
+  else str = 'This room is full';
+  $('#room').html(str);
 }
 async function transact(a) {
   if ($('#txtAmt').val() > 0) {
@@ -86,21 +93,9 @@ async function leave() {
   await contract.LEAVE(player.room, acct[0]).send(frm);
   refreshInfo();
 }
-async function isWeb3() {
-  if (typeof ethereum != 'undefined') {
-    d = await web3.getAccounts();
-    if (d.length > 0) {
-      $('#connect').hide();
-      $('#root').show();
-      rm = await contract.room(player.room).call();
-      if (rm.balance != balance || rm.playerCount != playerCount) refreshInfo();
-    } else $('#connect').show();
-  } else $('#connect').html('No Metamask');
-}
 function waitTxt() {
   $('#info').html(' <i>Waiting for transaction...</i>');
 }
-setInterval(isWeb3, 1000);
 async function load() {
   if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
@@ -347,9 +342,18 @@ async function load() {
     refreshInfo();
   }
 }
-for (i = 1; i < 53; i++) {
-  x = -1;
-  y = -142;
-  $('.c' + i).css('background-position', x + ' ' + y);
-}
 load();
+$(document).ready(function () {
+  setInterval(async function () {
+    if (typeof ethereum != 'undefined') {
+      d = await web3.getAccounts();
+      if (d.length > 0) {
+        $('#connect').hide();
+        $('#root').show();
+        rm = await contract.room(player.room).call();
+        if (rm.balance != balance || rm.playerCount != playerCount)
+          refreshInfo();
+      } else $('#connect').show();
+    } else $('#connect').html('No Metamask');
+  }, 1000);
+});

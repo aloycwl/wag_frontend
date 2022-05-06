@@ -21,7 +21,7 @@
       .table {
         background-color: #eeeeee;
         display: inline-block;
-        padding: 5;
+        padding: 5px;
         text-align: center;
       }
       .cards {
@@ -29,6 +29,15 @@
         display: inline-block;
         height: 60px;
         width: 40px;
+      }
+      .tables {
+        background-color: #eeeeee;
+        width: 24%;
+        margin: 5px;
+        text-align: center;
+        padding: 20px 0 20px 0;
+        border: 1px solid #000000;
+        display: inline-block;
       }
     </style>
   </head>
@@ -40,6 +49,7 @@
       <a onclick="transact(1)">Deposit</a> |
       <a onclick="transact(0)">Withdraw</a> <br />
       <p id="room"></p>
+      <p id="rooms" class="hide"></p>
     </div>
   </body>
 </html>

@@ -101,7 +101,7 @@ async function load() {
     web3 = new Web3(ethereum);
     web3 = web3.eth;
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
-    frm = { from: acct[0], gas: 21e5 };
+    frm = { from: acct[0] };
     if ((await web3.net.getId()) != 4) {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',

@@ -1,7 +1,26 @@
 async function refreshInfo() {
   player = await contract.GetPlayer(acct[0]).call();
-  $('#info').html(`Balance: ${player[0]}, WAC tokens:
+  str = '';
+  for (i = 0; i < player[1].length; i++)
+    str += `${player[1][i]}\\${player[2][i]}, `;
+  $('#info').html(`Balance: ${
+    player[0]
+  }, Current rooms and number: ${str}, WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
+  str = '';
+  amt = [5, 10, 20, 50, 100, 200, 500, 1000];
+  for (i = 0; i < 8; i++) {
+    rmHist = await contract.GetRoomHistory(amt[i]).call();
+    s = `Previous winning number: ${rmHist[0]}, betted numbers:<br>`;
+    for (j = 0; j < rmHist[1].length; j++) s += rmHist[1][j] + ', ';
+    str += `<div class="tables">Bet size: ${amt[i]}<br><input id="n${amt[i]}"placeholder="1-12">
+    <button onclick="bet(${amt[i]})">Bet</button><br><br>${s}</div>`;
+  }
+  $('#room').html(str);
+}
+async function bet(a) {
+  await contract.BET(a, $('#n' + a).val()).send(frm);
+  refreshInfo();
 }
 async function transact(a) {
   if ($('#txtAmt').val() > 0) {
@@ -21,7 +40,7 @@ async function load() {
     web3 = new Web3(ethereum);
     web3 = web3.eth;
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
-    frm = { from: acct[0], gas: 21e5 };
+    frm = { from: acct[0] };
     if ((await web3.net.getId()) != 4) {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -35,12 +54,12 @@ async function load() {
           inputs: [
             {
               internalType: 'uint256',
-              name: 'a',
+              name: '',
               type: 'uint256',
             },
             {
               internalType: 'uint256',
-              name: 'b',
+              name: '',
               type: 'uint256',
             },
           ],
@@ -53,7 +72,7 @@ async function load() {
           inputs: [
             {
               internalType: 'uint256',
-              name: 'a',
+              name: '',
               type: 'uint256',
             },
           ],
@@ -66,7 +85,7 @@ async function load() {
           inputs: [
             {
               internalType: 'uint256',
-              name: 'a',
+              name: '',
               type: 'uint256',
             },
           ],

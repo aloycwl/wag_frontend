@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>12 Numbers | WAG</title>
+    <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
+    <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
+    <script src="js/load2.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      a {
+        cursor: pointer;
+        background-color: #ffffe0;
+      }
+      .hide {
+        display: none;
+      }
+      .table {
+        background-color: #eeeeee;
+        display: inline-block;
+        padding: 5px;
+        text-align: center;
+      }
+      .tables {
+        background-color: #eeeeee;
+        width: 24%;
+        margin: 5px;
+        text-align: center;
+        padding: 20px 0 20px 0;
+        border: 1px solid #000000;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">Niu Niu</a>
+    <a id="connect" onclick="load();">Connect</a>
+    <div id="root" class="hide">
+      <p id="info"></p>
+      <input id="txtAmt" type="number" placeholder="Amount" />
+      <a onclick="transact(1)">Deposit</a> |
+      <a onclick="transact(0)">Withdraw</a>
+      <br />
+    </div>
+  </body>
+</html>

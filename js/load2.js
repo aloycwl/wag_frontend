@@ -48,47 +48,34 @@ async function load() {
       });
       location.reload();
     }
+    ui = {
+      internalType: 'uint256',
+      name: '',
+      type: 'uint256',
+    };
+    ua = {
+      internalType: 'uint256[]',
+      name: '',
+      type: 'uint256[]',
+    };
     contract = new web3.Contract(
       [
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
+          inputs: [ui, ui],
           name: 'BET',
           outputs: [],
           stateMutability: 'nonpayable',
           type: 'function',
         },
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
+          inputs: [ui],
           name: 'DEPOSIT',
           outputs: [],
           stateMutability: 'nonpayable',
           type: 'function',
         },
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
+          inputs: [ui],
           name: 'WITHDRAW',
           outputs: [],
           stateMutability: 'nonpayable',
@@ -103,46 +90,16 @@ async function load() {
             },
           ],
           name: 'GetPlayer',
-          outputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256[]',
-              name: '',
-              type: 'uint256[]',
-            },
-            {
-              internalType: 'uint256[]',
-              name: '',
-              type: 'uint256[]',
-            },
-          ],
+          outputs: [ui, ua, ua],
           stateMutability: 'view',
           type: 'function',
         },
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-          ],
+          inputs: [ui],
           name: 'GetRoomHistory',
           outputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256[]',
-              name: '',
-              type: 'uint256[]',
-            },
+            ui,
+            ua,
             {
               internalType: 'address[]',
               name: '',
@@ -167,13 +124,7 @@ async function load() {
             },
           ],
           name: 'balanceOf',
-          outputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
+          outputs: [ui],
           stateMutability: 'view',
           type: 'function',
         },

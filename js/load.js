@@ -6,7 +6,7 @@ async function refreshInfo() {
   balance = rm.balance;
   playerCount = rm.playerCount;
   $('#info').html(`You are in room ${player.room}
-  <br>Balance: ${parseInt(player.balance).toLocaleString()}<br>WAC tokens:
+  <br>Balance: ${parseInt(player.balance).toLocaleString()}<br>WAG tokens:
   ${(
     (await contract2.methods.balanceOf(acct[0]).call()) / 1e18
   ).toLocaleString()}`);

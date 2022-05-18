@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Highest 5 | WAG</title>
+    <title>Niu Niu | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
     <script src="js/load.js"></script>
@@ -12,9 +12,9 @@
         padding: 0;
         font-family: Tahoma;
       }
-      body{
-        background-color:#666666;
-        margin:10px;
+      body {
+        background-color: #666666;
+        margin: 10px;
       }
       a {
         cursor: pointer;
@@ -47,29 +47,41 @@
       }
       table {
         width: 100%;
-        background-color:#ffffff;
-        
+        background-color: #ffffff;
       }
       td.menu {
-        padding-right:50px;
+        padding-right: 50px;
         font-weight: bold;
       }
-      td.side{
-        width:200px;
-        font-size:small;
+      td.side {
+        width: 200px;
+        font-size: small;
       }
     </style>
   </head>
   <body>
-    <table><tr><td width="500px">
-      <img src="https://aloycwl.github.io/wag_frontend/img/logo.png"width="341"height="128" /></td>
-      <td class="menu"><a href="index.html">Niu Niu</a> <a href="12num.html">12 Numbers</a></td>
-    <td class="side"><a id="connect" onclick="load();">Connect</a><p id="info"></p><input id="txtAmt" type="number" placeholder="Amount" /><br>
-      <a onclick="transact(1)">Deposit</a>/<a onclick="transact(0)">Withdraw</a></td>
-    </tr></table>
-    </div>
-    
-    
+    <table>
+      <tr>
+        <td width="500px">
+          <img
+            src="https://aloycwl.github.io/wag_frontend/img/logo.png"
+            width="341"
+            height="128"
+          />
+        </td>
+        <td class="menu">
+          <a href="index.html">Niu Niu</a> <a href="12num.html">12 Numbers</a>
+        </td>
+        <td class="side">
+          <a id="connect" onclick="load();">Connect</a>
+          <p id="info"></p>
+          <input id="txtAmt" type="number" placeholder="Amount" /><br />
+          <a onclick="transact(1)">Deposit</a>/<a onclick="transact(0)"
+            >Withdraw</a
+          >
+        </td>
+      </tr>
+    </table>
     <div id="root" class="hide">
       <p id="room"></p>
       <p id="rooms" class="hide"></p>

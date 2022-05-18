@@ -5,8 +5,8 @@ async function refreshInfo() {
   rm = await contract.room(player.room).call();
   balance = rm.balance;
   playerCount = rm.playerCount;
-  $('#info').html(`You are in room ${player.room},
-  Balance: ${player.balance}, WAC tokens:
+  $('#info').html(`You are in room ${player.room}
+  <br>Balance: ${player.balance}<br>WAC tokens:
   ${(await contract2.methods.balanceOf(acct[0]).call()) / 1e18}`);
   if (player.room > 0) {
     players = await contract.getRoomInfo(player.room).call();

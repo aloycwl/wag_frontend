@@ -10,11 +10,16 @@
       * {
         margin: 0;
         padding: 0;
+        font-family: Tahoma;
+      }
+      body{
+        background-color:#666666;
+        margin:10px;
       }
       a {
         cursor: pointer;
-        background-color: #ffffe0;
         text-decoration: none;
+        color: #aa6c39;
       }
       .hide {
         display: none;
@@ -40,24 +45,28 @@
         border: 1px solid #000000;
         display: inline-block;
       }
-      .logo {
-        width: 30%;
-        font-size: 30px;
-        background-color:#efefef
+      table {
+        width: 100%;
+        background-color:#ffffff;
+        
       }
-      .logo,
-      .menu {
-        display: inline-block;
-        height: 50px;
+      table a {
+        padding-right:50px;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <div class="logo">We Are Gamblers (WAG)</div>
-    <div class="menu"><a href="12num.html">12 Numbers</a></div>
-    <a id="connect" onclick="load();">Connect</a>
+    <table><tr><td width="500px">
+      <img src="https://aloycwl.github.io/wag_frontend/img/logo.png"width="341"height="128" /></td>
+      <td><a href="index.html">Niu Niu</a> <a href="12num.html">12 Numbers</a></td>
+    <td><a id="connect" onclick="load();">Connect</a><p id="info"></p></td>
+    </tr></table>
+    </div>
+    
+    
     <div id="root" class="hide">
-      <p id="info"></p>
+      
       <input id="txtAmt" type="number" placeholder="Amount" />
       <a onclick="transact(1)">Deposit</a> |
       <a onclick="transact(0)">Withdraw</a> <br />

@@ -27,13 +27,7 @@ async function refreshInfo() {
       rm = await contract.getRoomInfo(i).call();
       rl = rm[0].length;
       i = i > 11 ? 99 : i;
-      str2 = `<a onclick="r=${i};join(${i})">`;
-      str =
-        rl == 0
-          ? `<input id="i${i}" placeholder="Amount"> ${str2}Create</a>`
-          : rl == 5
-          ? `Full`
-          : `${str2}Join</a>`;
+      str = roomStat(i, rl);
       if (i == 99) str = `<a onclick="search()">Search</a>`;
       $('#rooms').append(
         `<div id="d${i}" class="tables"><b>Room ${
@@ -44,6 +38,17 @@ async function refreshInfo() {
       );
     }
   }
+}
+function roomStat(i, rl) {
+  str2 = `<a onclick="r=${i};join(${i})">`;
+  return rl == 0
+    ? `<input id="i${i}" placeholder="Amount"> ${str2}Create</a>`
+    : rl == 5
+    ? `Full`
+    : `${str2}Join</a>`;
+}
+async function search() {
+  rm = await contract.getRoomInfo($('#r99').val()).call();
 }
 async function deal() {
   waitTxt();

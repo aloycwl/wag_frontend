@@ -21,6 +21,9 @@
         text-decoration: none;
         color: #aa6c39;
       }
+      input {
+        width: 50px;
+      }
       a:hover {
         color: #000000;
       }
@@ -78,14 +81,10 @@
         <td class="side">
           <a id="connect" onclick="load();">Connect</a>
           <p id="info"></p>
-          <input id="txtAmt" type="number" placeholder="Amount" /><br />
-          <a onclick="transact(1)">Deposit</a>/<a onclick="transact(0)"
-            >Withdraw</a
-          >
         </td>
       </tr>
     </table>
-    <div id="root" class="hide">
+    <div id="root" class="">
       <p id="room"></p>
       <p id="rooms" class="hide"></p>
     </div>

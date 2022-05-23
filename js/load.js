@@ -2,19 +2,19 @@ var balance = 0,
   playerCount = 0;
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
-  rm = await contract.room(player.room).call();
-  balance = rm.balance;
-  playerCount = rm.playerCount;
-  $('#info').html(`You are in room ${player.room}
-  <br>Balance: ${parseInt(player.balance).toLocaleString()}<br>WAG tokens:
+  rm = player.room;
+  $('#info').html(`WAG tokens:
   ${(
     (await contract2.methods.balanceOf(acct[0]).call()) / 1e18
   ).toLocaleString()}`);
   if (player.room > 0) {
+    $('#info').append(`<br>You are in room ${player.room}`);
     players = await contract.getRoomInfo(player.room).call();
     dealt = balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
-    str = `Room#${player.room} | ${balance}-Balance | ${playerCount}-Players${
+    str = `Room#${player.room} | ${balance}-Balance | ${
+      players[0].length
+    }-Players${
       host
         ? ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
         : ``
@@ -31,18 +31,25 @@ async function refreshInfo() {
       }
     }
   } else {
-    str =
-      '<input id="txtRoom"placeholder="Room Number"><button onclick="search()">Search Room #</button>';
     $('#rooms').show();
     for (i = 1; i < 13; i++) {
-      rm = await contract.room(i).call();
+      rm = await contract.getRoomInfo(i).call();
+      rl = rm[0].length;
+      str =
+        rl == 0
+          ? `<input id="i${i}" placeholder="Amount"> <a onclick="join(${i})">Create</a>`
+          : rl == 5
+          ? `Full`
+          : `<a onclick="join(${i})">Join</a>`;
+      if (i == 12) {
+        i = `<input id="r99" placeholder="custom">`;
+        str = `<input id="i99" placeholder="Amount"> <a onclick="join(99)">Create</a>`;
+      }
       $('#rooms').append(
-        `<div class="tables"><b>Room ${i}</b><br>Balance: ${rm.balance}<br>Bet size: 
-        ${rm.betSize}<br>Players: ${rm.playerCount}<br><a onclick="$('#txtRoom').val(${i});window.search();">Explore</a></div>`
+        `<div class="tables"><b>Room ${i}</b><br>Bet size: ${rm[3]}<br>Players: ${rm[0].length}/5<br>${str}</div>`
       );
     }
   }
-  $('#room').html(str);
   x = -1;
   y = -142;
   for (i = 0; i < 52; i++) {
@@ -53,30 +60,9 @@ async function refreshInfo() {
     } else x -= 50;
   }
 }
-async function search() {
-  rmNum = $('#txtRoom').val();
-  d = await contract.room(rmNum).call();
-  if (d.playerCount == 0)
-    str = `<input id="amt"type="number"min="10"placeholder="Room Min Bet Size"> <a onclick="join(0)">Create a new room</a>`;
-  else if (d.playerCount < 5) str = '<a onclick="join(1)">Join</a>';
-  else str = 'This room is full';
-  $('#room').html(str);
-}
-async function transact(a) {
-  if ($('#txtAmt').val() > 0) {
-    waitTxt();
-    await (a == 1 ? contract.DEPOSIT : contract.WITHDRAW)(
-      $('#txtAmt').val()
-    ).send(frm);
-    refreshInfo();
-    $('#txtAmt').val('');
-  }
-}
 async function deal() {
   waitTxt();
-  ($('#deal').text() == 'Deal' ? contract.DEAL : contract.CHECK)(
-    player.room
-  ).send(frm);
+  contract.DEAL(player.room).send(frm);
 }
 async function join(a) {
   b = a == 0 ? parseInt($('#amt').val()) : rm.betSize;
@@ -116,6 +102,21 @@ async function load() {
       name: '',
       type: 'uint256',
     };
+    u2 = {
+      internalType: 'uint256[]',
+      name: '',
+      type: 'uint256[]',
+    };
+    u3 = {
+      internalType: 'address',
+      name: '',
+      type: 'address',
+    };
+    u4 = {
+      internalType: 'address[]',
+      name: '',
+      type: 'address[]',
+    };
     contract = new web3.Contract(
       [
         {
@@ -133,14 +134,7 @@ async function load() {
           type: 'function',
         },
         {
-          inputs: [
-            u1,
-            {
-              internalType: 'address',
-              name: '',
-              type: 'address',
-            },
-          ],
+          inputs: [u1, u3],
           name: 'LEAVE',
           outputs: [],
           stateMutability: 'nonpayable',
@@ -149,35 +143,12 @@ async function load() {
         {
           inputs: [u1],
           name: 'getRoomInfo',
-          outputs: [
-            {
-              internalType: 'address[]',
-              name: '',
-              type: 'address[]',
-            },
-            {
-              internalType: 'uint256[]',
-              name: '',
-              type: 'uint256[]',
-            },
-            {
-              internalType: 'uint256[]',
-              name: '',
-              type: 'uint256[]',
-            },
-            u1,
-          ],
+          outputs: [u4, u2, u2, u1],
           stateMutability: 'view',
           type: 'function',
         },
         {
-          inputs: [
-            {
-              internalType: 'address',
-              name: '',
-              type: 'address',
-            },
-          ],
+          inputs: [u3],
           name: 'player',
           outputs: [u1, u1],
           stateMutability: 'view',
@@ -190,21 +161,9 @@ async function load() {
     contract2 = new web3.Contract(
       [
         {
-          inputs: [
-            {
-              internalType: 'address',
-              name: '',
-              type: 'address',
-            },
-          ],
+          inputs: [u3],
           name: 'balanceOf',
-          outputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
+          outputs: [u1],
           stateMutability: 'view',
           type: 'function',
         },
@@ -215,7 +174,7 @@ async function load() {
   }
 }
 load();
-$(document).ready(function () {
+/*$(document).ready(function () {
   setInterval(async function () {
     if (typeof ethereum != 'undefined') {
       d = await web3.getAccounts();
@@ -229,3 +188,4 @@ $(document).ready(function () {
     } else $('#connect').html('No Metamask');
   }, 1000);
 });
+*/

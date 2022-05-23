@@ -111,60 +111,22 @@ async function load() {
       });
       location.reload();
     }
+    u1 = {
+      internalType: 'uint256',
+      name: '',
+      type: 'uint256',
+    };
     contract = new web3.Contract(
       [
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-          ],
-          name: 'CHECK',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
-        },
-        {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-          ],
+          inputs: [u1],
           name: 'DEAL',
           outputs: [],
           stateMutability: 'nonpayable',
           type: 'function',
         },
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-          ],
-          name: 'DEPOSIT',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
-        },
-        {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256',
-              name: 'b',
-              type: 'uint256',
-            },
-          ],
+          inputs: [u1, u1],
           name: 'JOIN',
           outputs: [],
           stateMutability: 'nonpayable',
@@ -172,14 +134,10 @@ async function load() {
         },
         {
           inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
+            u1,
             {
               internalType: 'address',
-              name: 'b',
+              name: '',
               type: 'address',
             },
           ],
@@ -189,58 +147,25 @@ async function load() {
           type: 'function',
         },
         {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-          ],
-          name: 'WITHDRAW',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
-        },
-        {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: 'a',
-              type: 'uint256',
-            },
-          ],
+          inputs: [u1],
           name: 'getRoomInfo',
           outputs: [
             {
               internalType: 'address[]',
-              name: 'b',
+              name: '',
               type: 'address[]',
             },
             {
-              internalType: 'uint256[5]',
+              internalType: 'uint256[]',
               name: '',
-              type: 'uint256[5]',
+              type: 'uint256[]',
             },
             {
-              internalType: 'uint256[5]',
+              internalType: 'uint256[]',
               name: '',
-              type: 'uint256[5]',
+              type: 'uint256[]',
             },
-            {
-              internalType: 'uint256[5]',
-              name: '',
-              type: 'uint256[5]',
-            },
-            {
-              internalType: 'uint256[5]',
-              name: '',
-              type: 'uint256[5]',
-            },
-            {
-              internalType: 'uint256[5]',
-              name: '',
-              type: 'uint256[5]',
-            },
+            u1,
           ],
           stateMutability: 'view',
           type: 'function',
@@ -254,67 +179,12 @@ async function load() {
             },
           ],
           name: 'player',
-          outputs: [
-            {
-              internalType: 'uint256',
-              name: 'points',
-              type: 'uint256',
-            },
-            {
-              internalType: 'bool',
-              name: 'playing',
-              type: 'bool',
-            },
-            {
-              internalType: 'uint256',
-              name: 'room',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256',
-              name: 'balance',
-              type: 'uint256',
-            },
-          ],
-          stateMutability: 'view',
-          type: 'function',
-        },
-        {
-          inputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
-          name: 'room',
-          outputs: [
-            {
-              internalType: 'uint256',
-              name: 'betSize',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256',
-              name: 'balance',
-              type: 'uint256',
-            },
-            {
-              internalType: 'uint256',
-              name: 'playerCount',
-              type: 'uint256',
-            },
-            {
-              internalType: 'bool',
-              name: 'hidden',
-              type: 'bool',
-            },
-          ],
+          outputs: [u1, u1],
           stateMutability: 'view',
           type: 'function',
         },
       ],
-      '0x80BB34c189D43C6c3b3FB8B7921A6A389Ed92198'
+      '0xc7300d5452ee8DCDB2A862E7f2C56B35e040E457'
     );
     contract = contract.methods;
     contract2 = new web3.Contract(
@@ -323,7 +193,7 @@ async function load() {
           inputs: [
             {
               internalType: 'address',
-              name: 'account',
+              name: '',
               type: 'address',
             },
           ],
@@ -339,7 +209,7 @@ async function load() {
           type: 'function',
         },
       ],
-      '0x613Fe13FEE32E4aA8f6C2FB290816A24D6371164'
+      '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
     );
     refreshInfo();
   }

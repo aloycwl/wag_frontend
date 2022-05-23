@@ -1,23 +1,14 @@
-var balance = 0,
-  playerCount = 0;
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
-  rm = player.room;
-  $('#info').html(`WAG tokens:
-  ${(
-    (await contract2.methods.balanceOf(acct[0]).call()) / 1e18
-  ).toLocaleString()}`);
-  if (player.room > 0) {
+  rm = player[1];
+  balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+  $('#info').html(`WAG tokens: ${balance.toLocaleString()}`);
+  if (player[1] > 0) {
     $('#info').append(`<br>You are in room ${player.room}`);
     players = await contract.getRoomInfo(player.room).call();
-    dealt = balance > 0;
     host = players.b[0].toLowerCase() == acct[0];
-    str = `Room#${player.room} | ${balance}-Balance | ${
-      players[0].length
-    }-Players${
-      host
-        ? ` | <a id="deal"onclick="deal()">${dealt ? 'Check' : 'Deal'}</a>`
-        : ``
+    str = `Room#${player.room} | ${players[0].length}-Players${
+      host ? ` | <a id="deal"onclick="deal()">Deal</a>` : ``
     } | <a onclick="leave()">Leave</a><br>`;
     if (dealt) {
       p = players[0];
@@ -35,29 +26,23 @@ async function refreshInfo() {
     for (i = 1; i < 13; i++) {
       rm = await contract.getRoomInfo(i).call();
       rl = rm[0].length;
+      i = i > 11 ? 99 : i;
+      str2 = `<a onclick="r=${i};join(${i})">`;
       str =
         rl == 0
-          ? `<input id="i${i}" placeholder="Amount"> <a onclick="join(${i})">Create</a>`
+          ? `<input id="i${i}" placeholder="Amount"> ${str2}Create</a>`
           : rl == 5
           ? `Full`
-          : `<a onclick="join(${i})">Join</a>`;
-      if (i == 12) {
-        i = `<input id="r99" placeholder="custom">`;
-        str = `<input id="i99" placeholder="Amount"> <a onclick="join(99)">Create</a>`;
-      }
+          : `${str2}Join</a>`;
+      if (i == 99) str = `<a onclick="search()">Search</a>`;
       $('#rooms').append(
-        `<div class="tables"><b>Room ${i}</b><br>Bet size: ${rm[3]}<br>Players: ${rm[0].length}/5<br>${str}</div>`
+        `<div id="d${i}" class="tables"><b>Room ${
+          i < 12 ? i : `<input id="r99" placeholder="custom">`
+        }</b><br>Bet size: ${rm[3]}<br>Players: ${
+          rm[0].length
+        }/5<br>${str}</div>`
       );
     }
-  }
-  x = -1;
-  y = -142;
-  for (i = 0; i < 52; i++) {
-    $('.c' + i).css('background-position', x + 'px ' + y + 'px');
-    if ((i + 1) % 13 == 0) {
-      x = -1;
-      y = i == 25 ? -212 : i == 38 ? -2 : -72;
-    } else x -= 50;
   }
 }
 async function deal() {
@@ -65,14 +50,14 @@ async function deal() {
   contract.DEAL(player.room).send(frm);
 }
 async function join(a) {
-  b = a == 0 ? parseInt($('#amt').val()) : rm.betSize;
+  b = a == 0 ? parseInt($('#amt').val()) : 10;
   str = '';
   if (a == 0 && b < 10) str = 'Minimum bet size is 10';
-  if (player.balance < b) str = 'Insufficent balance';
+  if (balance < b) str = 'Insufficent balance';
   $('#room').html(str);
   if (str == '') {
     waitTxt();
-    await contract.JOIN(rmNum, b).send(frm);
+    await contract.JOIN(r, b).send(frm);
     refreshInfo();
   }
 }
@@ -171,6 +156,15 @@ async function load() {
       '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
     );
     refreshInfo();
+  }
+  x = -1;
+  y = -142;
+  for (i = 0; i < 52; i++) {
+    $('.c' + i).css('background-position', x + 'px ' + y + 'px');
+    if ((i + 1) % 13 == 0) {
+      x = -1;
+      y = i == 25 ? -212 : i == 38 ? -2 : -72;
+    } else x -= 50;
   }
 }
 load();

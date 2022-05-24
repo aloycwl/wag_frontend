@@ -22,14 +22,20 @@ async function refreshInfo() {
       }
     }
   } else {
-    $('#rooms').show();
+    $('#room').show();
     waitTxt();
     for (i = 1; i < 13; i++) {
       rm = await contract.getRoomInfo(i).call();
       rl = rm[0].length;
       i = i > 11 ? 12 : i;
-      str = roomStat(i, rl);
-      $('#rooms').append(
+      s = `<a onclick="r=${i};join(${i})">`;
+      str =
+        rl == 0
+          ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
+          : rl == 5
+          ? `Full`
+          : `${s}Join</a>`;
+      $('#room').append(
         `<div class="tables"><b>Room ${
           i < 12
             ? `${i}</b><br>Bet size: ${rm[3]}<br>Players: ${rm[0].length}/5`
@@ -39,14 +45,6 @@ async function refreshInfo() {
     }
     loaded();
   }
-}
-function roomStat(i, rl) {
-  s = `<a onclick="r=${i};join(${i})">`;
-  return rl == 0
-    ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
-    : rl == 5
-    ? `Full`
-    : `${s}Join</a>`;
 }
 async function deal() {
   waitTxt();

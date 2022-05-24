@@ -36,15 +36,6 @@
         margin: 10px 0 0 0;
         text-align: center;
       }
-      .cards {
-        background-image: url('https://aloycwl.github.io/wag_frontend/img/cardset.png');
-        display: inline-block;
-        height: 60px;
-        width: 40px;
-      }
-      .niu {
-        filter: brightness(0.7);
-      }
       .tables {
         background-color: #eeeeee;
         width: 24%;
@@ -102,21 +93,28 @@
         amt = [5, 10, 20, 50, 100, 200, 500, 1000];
         balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
+        str='';
         for (i = 0; i < 8; i++) {
           rmHist = await contract.GetRoomHistory(amt[i]).call();
-          $('#room').append(await reloadBox(amt[i], 1));
+          s = ``;
+          s2 = ``;
+          for (j = 0; j < rh[1].length; j++)
+            s += rh[1][j] + (j > 11 ? '' : ', ');
+          s2 += `${
+            rl ? `<div id="d${amt[i]}"class="tables">` : ``
+          }Bet size: <b>${amt[i]}</b><br><br><input id="n${
+            amt[i]
+          }"placeholder="1-12">
+          <button onclick="bet(${amt[i]})">Bet</button><br><br>
+          Current bets placed: ${rh[2]}<br>Previous winning number: <b>${
+            rh[0]
+          }</b><br>Previous betted numbers:
+          ${s}${rl ? `</div>` : ``}`;
         }
-        x = -1;
-        y = -142;
-        for (i = 1; i < 53; i++) {
-          $('.c' + i).css('background-position', x + 'px ' + y + 'px');
-          if (i % 13 == 0) (x = -1), (y = i == 25 ? -212 : i == 38 ? -2 : -72);
-          else x -= 50;
-        }
+        $('#room').append(await reloadBox(amt[i], 1));
         waitTxt(0);
       }
       async function reloadBox(rh, rl) {
-        rh = await contract.GetRoomHistory(rh).call();
         s = ``;
         s2 = ``;
         for (j = 0; j < rh[1].length; j++) s += rh[1][j] + (j > 11 ? '' : ', ');

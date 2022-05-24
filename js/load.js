@@ -1,4 +1,4 @@
-var loaded = 0;
+balance = 0;
 async function refreshInfo() {
   waitTxt(1);
   player = await contract.player(acct[0]).call();
@@ -28,15 +28,22 @@ async function refreshInfo() {
       for (j = 0; j < 5; j++) {
         c1 = i * 5 + j;
         s3 = '';
-        if (p2[c2] == j || p2[c2 + 1] == j || p2[c2 + 2] == j) s3 = ' niu';
+        if (
+          (p2[c2] == j || p2[c2 + 1] == j || p2[c2 + 2] == j) &&
+          p2[c2] != p2[c2 + 1]
+        )
+          s3 = ' niu';
         s2 += p1[c1] < 1 ? `` : `<p class="cards c${p1[c1]}${s3}"></p>`;
       }
       p1 = await contract.player(p[i]).call();
-      points;
       str += `${
         s2 == '' ? `<br>No previous results` : s2
       }<br><br><p id="n${i}">${
-        p3[i] > 0 ? `You got niu! <b>${p3[i]}</b> points ${Math.max(p3)==p3[i]?`<br><b>***WINNER***</b>`}` : `No niu =(`
+        p3[i] > 0
+          ? `You got niu! <b>${p3[i]}</b> points ${
+              Math.max(p3) == p3[i] ? `<br><b>***WINNER***</b>` : ``
+            }`
+          : `No niu =(`
       }</p></div>`;
     }
   } else {
@@ -71,7 +78,6 @@ async function refreshInfo() {
 async function deal() {
   waitTxt(1);
   await contract.DEAL(player[1]).send(frm);
-  refreshInfo();
 }
 async function join(a) {
   b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
@@ -182,6 +188,7 @@ async function load() {
       ],
       '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
     );
+    refreshInfo();
   }
 }
 load();
@@ -192,8 +199,9 @@ $(document).ready(function () {
       if (d.length > 0) {
         $('#connect').hide();
         $('#root').show();
-        if (loaded < 1) {
-          loaded = 1;
+        gB2 = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+        if (gB2 != balance) {
+          balance = gB2;
           refreshInfo();
         }
       } else $('#connect').show();

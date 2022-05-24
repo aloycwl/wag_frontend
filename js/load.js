@@ -23,32 +23,36 @@ async function refreshInfo() {
     }
   } else {
     $('#rooms').show();
+    waitTxt();
     for (i = 1; i < 13; i++) {
       rm = await contract.getRoomInfo(i).call();
       rl = rm[0].length;
       i = i > 11 ? 99 : i;
       str = roomStat(i, rl);
-      if (i == 99) str = `<a onclick="search()">Search</a>`;
+      if (i == 99) str = `<a onclick="sh()">Search</a>`;
       $('#rooms').append(
-        `<div id="d${i}" class="tables"><b>Room ${
+        `<div class="tables"><b>Room ${
           i < 12 ? i : `<input id="r99" placeholder="custom">`
         }</b><br>Bet size: ${rm[3]}<br>Players: ${
           rm[0].length
-        }/5<br>${str}</div>`
+        }/5<p id="d${i}">${str}</p></div>`
       );
     }
+    loaded();
   }
 }
 function roomStat(i, rl) {
-  str2 = `<a onclick="r=${i};join(${i})">`;
+  s = `<a onclick="r=${i};join(${i})">`;
   return rl == 0
-    ? `<input id="i${i}" placeholder="Amount"> ${str2}Create</a>`
+    ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
     : rl == 5
     ? `Full`
-    : `${str2}Join</a>`;
+    : `${s}Join</a>`;
 }
-async function search() {
-  rm = await contract.getRoomInfo($('#r99').val()).call();
+async function sh() {
+  r = $('#r99').val();
+  rm = await contract.getRoomInfo(r).call();
+  $(`#d99`).html(roomStat(r, rm[0].length));
 }
 async function deal() {
   waitTxt();
@@ -72,7 +76,10 @@ async function leave() {
   refreshInfo();
 }
 function waitTxt() {
-  $('#info').html(' <i>Waiting for transaction...</i>');
+  $('#load').html(' <i>Loading...</i>');
+}
+function loaded() {
+  $('#load').html('');
 }
 async function load() {
   if (typeof ethereum != 'undefined') {

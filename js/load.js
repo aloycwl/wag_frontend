@@ -3,7 +3,7 @@ async function refreshInfo() {
   waitTxt(1);
   player = await contract.player(acct[0]).call();
   balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
-  $('#info').html(`WAG tokens: ${balance.toLocaleString()}`);
+  $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
   str = '';
   if (player[1] > 0) {
     players = await contract.getRoomInfo(player[1]).call();
@@ -16,18 +16,21 @@ async function refreshInfo() {
         p.length
       }</b>/5${host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``}`
     );
-    ca1 = ca2 = 0;
     for (i = 0; i < p.length; i++) {
       str += `<div class="table">0x${p[i].substring(38)}<i>
         ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
-        ${host ? 'Host' : ''}</i><br>`;
-      p2 = players[1];
-      str += p2[ca1] == 0 ? `<br>No previous results` : ``;
+        ${host ? 'Host' : ''}</i><br><br>`;
+      p1 = players[1];
+      p2 = players[2];
+      s2 = '';
+      c2 = i * 3;
       for (j = 0; j < 5; j++) {
-        str += p2[ca1] < 1 ? `` : `<p class="cards c${p2[ca1]}"></p>`;
-        ca1++;
+        c1 = i * 5 + j;
+        s3 = '';
+        if (p2[c2] == j || p2[c2 + 1] == j || p2[c2 + 2] == j) s3 = ' niu';
+        s2 += p1[c1] < 1 ? `` : `<p class="cards c${p1[c1]}${s3}"></p>`;
       }
-      str += '</div>';
+      str += `${s2 == '' ? `<br>No previous results` : s2}</div>`;
     }
   } else {
     for (i = 1; i < 13; i++) {
@@ -65,9 +68,12 @@ async function deal() {
 }
 async function join(a) {
   b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
-  str = '';
-  if (b < 10) str = 'Minimum bet size is 10';
-  if (balance < b) str = 'Insufficent balance';
+  str =
+    b < 10
+      ? 'Minimum bet size is 10'
+      : balance < b
+      ? 'Insufficent balance'
+      : '';
   $('#load').html(str);
   if (str == '') {
     waitTxt(1);
@@ -77,7 +83,7 @@ async function join(a) {
 }
 async function leave() {
   waitTxt(1);
-  await contract.LEAVE(player.room, acct[0]).send(frm);
+  await contract.LEAVE(player[1], acct[0]).send(frm);
   refreshInfo();
 }
 function waitTxt(a) {

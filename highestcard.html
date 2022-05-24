@@ -148,19 +148,19 @@
             rm = await contract.getRoomInfo(i).call();
             rl = rm[0].length;
             s = `<a onclick="join(${i})">`;
-            str2 =
+            str += `<div class="tables"><b>Room ${
+              i < 12
+                ? `${i}</b><br>Bet size: ${rm[3] / 1e18}<br>Players: ${
+                    rm[0].length
+                  }/20`
+                : `<input id="r99" placeholder="custom"><br><br>`
+            }<br>${
               rl == 0
                 ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
                 : rl == 20
                 ? `Full`
-                : `${s}Join</a>`;
-            str += `<div class="tables"><b>Room ${
-              i < 12
-                ? `${i}</b><br>Bet size: ${rm[4] / 1e18}<br>Players: ${
-                    rm[0].length
-                  }/5`
-                : `<input id="r99" placeholder="custom"><br><br>`
-            }<br>${str2}</div>`;
+                : `${s}Join</a>`
+            }</div>`;
           }
         }
         $('#room').html(str);
@@ -178,6 +178,7 @@
         await contract.DEAL(room).send(frm);
       }
       async function join(a) {
+        a = $('#r99').length > 0 ? parseInt($('#99').val()) : a;
         b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
         str =
           b < 10

@@ -1,15 +1,18 @@
+var loaded = 0;
 async function refreshInfo() {
   player = await contract.player(acct[0]).call();
-  rm = player[1];
   balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
   $('#info').html(`WAG tokens: ${balance.toLocaleString()}`);
+  str = '';
   if (player[1] > 0) {
-    $('#info').append(`<br>You are in room ${player.room}`);
-    players = await contract.getRoomInfo(player.room).call();
+    $('#info').append(
+      `<br>Room: ${player[1]} <i><a onclick="leave()">Leave</a></i><br>`
+    );
+    players = await contract.getRoomInfo(player[1]).call();
     host = players.b[0].toLowerCase() == acct[0];
     str = `Room#${player.room} | ${players[0].length}-Players${
       host ? ` | <a id="deal"onclick="deal()">Deal</a>` : ``
-    } | <a onclick="leave()">Leave</a><br>`;
+    }`;
     if (dealt) {
       p = players[0];
       for (i = 0; i < p.length; i++) {
@@ -22,28 +25,26 @@ async function refreshInfo() {
       }
     }
   } else {
-    $('#room').show();
     waitTxt();
     for (i = 1; i < 13; i++) {
       rm = await contract.getRoomInfo(i).call();
       rl = rm[0].length;
       i = i > 11 ? 12 : i;
-      s = `<a onclick="r=${i};join(${i})">`;
-      str =
+      s = `<a onclick="join(${i})">`;
+      str2 =
         rl == 0
           ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
           : rl == 5
           ? `Full`
           : `${s}Join</a>`;
-      $('#room').append(
-        `<div class="tables"><b>Room ${
-          i < 12
-            ? `${i}</b><br>Bet size: ${rm[3]}<br>Players: ${rm[0].length}/5`
-            : `<input id="r99" placeholder="custom"><br><br>`
-        }<br>${str}</div>`
-      );
+      str += `<div class="tables"><b>Room ${
+        i < 12
+          ? `${i}</b><br>Bet size: ${rm[3]}<br>Players: ${rm[0].length}/5`
+          : `<input id="r99" placeholder="custom"><br><br>`
+      }<br>${str2}</div>`;
     }
   }
+  $('#room').append(str);
   loaded();
 }
 async function deal() {
@@ -51,14 +52,14 @@ async function deal() {
   contract.DEAL(player.room).send(frm);
 }
 async function join(a) {
-  b = a == 0 ? parseInt($('#amt').val()) : 10;
+  b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
   str = '';
-  if (a == 0 && b < 10) str = 'Minimum bet size is 10';
+  if (b < 10) str = 'Minimum bet size is 10';
   if (balance < b) str = 'Insufficent balance';
   $('#load').html(str);
   if (str == '') {
     waitTxt();
-    await contract.JOIN(r, b).send(frm);
+    await contract.JOIN(a, b).send(frm);
     refreshInfo();
   }
 }
@@ -159,7 +160,6 @@ async function load() {
       ],
       '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
     );
-    refreshInfo();
   }
   x = -1;
   y = -142;
@@ -172,18 +172,18 @@ async function load() {
   }
 }
 load();
-/*$(document).ready(function () {
+$(document).ready(function () {
   setInterval(async function () {
     if (typeof ethereum != 'undefined') {
       d = await web3.getAccounts();
       if (d.length > 0) {
         $('#connect').hide();
         $('#root').show();
-        rm = await contract.room(player.room).call();
-        if (rm.balance != balance || rm.playerCount != playerCount)
+        if (loaded < 1) {
+          loaded = 1;
           refreshInfo();
+        }
       } else $('#connect').show();
     } else $('#connect').html('No Metamask');
   }, 1000);
 });
-*/

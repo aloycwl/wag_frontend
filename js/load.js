@@ -1,31 +1,35 @@
 var loaded = 0;
 async function refreshInfo() {
+  waitTxt(1);
   player = await contract.player(acct[0]).call();
   balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
   $('#info').html(`WAG tokens: ${balance.toLocaleString()}`);
   str = '';
   if (player[1] > 0) {
     players = await contract.getRoomInfo(player[1]).call();
-    host = players[0][0].toLowerCase() == acct[0];
+    p = players[0];
+    host = p[0].toLowerCase() == acct[0];
     $('#info').append(
       `<br><br>Room: <b>${
         player[1]
-      }</b> <i><a onclick="leave()">Leave</a></i><br>Players: <b>${
-        players[0].length
-      }</b>/5${host ? `<br><a id="deal"onclick="deal()">Deal</a>` : ``}`
+      }</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
+        p.length
+      }</b>/5${host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``}`
     );
-
-    p = players[0];
+    ca1 = ca2 = 0;
     for (i = 0; i < p.length; i++) {
       str += `<div class="table">0x${p[i].substring(38)}<i>
-        ${p[i].toLowerCase() == acct[0] ? 'You' : ''}
+        ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
         ${host ? 'Host' : ''}</i><br>`;
-      for (j = 0; j < 5; j++)
-        str += `<p class="cards c${players[i + 1][j]}"></p>`;
+      p2 = players[1];
+      str += p2[ca1] == 0 ? `<br>No previous results` : ``;
+      for (j = 0; j < 5; j++) {
+        str += p2[ca1] < 1 ? `` : `<p class="cards c${p2[ca1]}"></p>`;
+        ca1++;
+      }
       str += '</div>';
     }
   } else {
-    waitTxt();
     for (i = 1; i < 13; i++) {
       rm = await contract.getRoomInfo(i).call();
       rl = rm[0].length;
@@ -45,11 +49,19 @@ async function refreshInfo() {
     }
   }
   $('#room').append(str);
-  loaded();
+  x = -1;
+  y = -142;
+  for (i = 1; i < 53; i++) {
+    $('.c' + i).css('background-position', x + 'px ' + y + 'px');
+    if (i % 13 == 0) (x = -1), (y = i == 25 ? -212 : i == 38 ? -2 : -72);
+    else x -= 50;
+  }
+  waitTxt(0);
 }
 async function deal() {
-  waitTxt();
-  contract.DEAL(player.room).send(frm);
+  waitTxt(1);
+  contract.DEAL(player[1]).send(frm);
+  refreshInfo();
 }
 async function join(a) {
   b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
@@ -58,21 +70,18 @@ async function join(a) {
   if (balance < b) str = 'Insufficent balance';
   $('#load').html(str);
   if (str == '') {
-    waitTxt();
+    waitTxt(1);
     await contract.JOIN(a, b).send(frm);
     refreshInfo();
   }
 }
 async function leave() {
-  waitTxt();
+  waitTxt(1);
   await contract.LEAVE(player.room, acct[0]).send(frm);
   refreshInfo();
 }
-function waitTxt() {
-  $('#load').html('Loading...');
-}
-function loaded() {
-  $('#load').html('');
+function waitTxt(a) {
+  $('#load').html(a > 0 ? 'Loading...' : '');
 }
 async function load() {
   if (typeof ethereum != 'undefined') {
@@ -160,15 +169,6 @@ async function load() {
       ],
       '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
     );
-  }
-  x = -1;
-  y = -142;
-  for (i = 0; i < 52; i++) {
-    $('.c' + i).css('background-position', x + 'px ' + y + 'px');
-    if ((i + 1) % 13 == 0) {
-      x = -1;
-      y = i == 25 ? -212 : i == 38 ? -2 : -72;
-    } else x -= 50;
   }
 }
 load();

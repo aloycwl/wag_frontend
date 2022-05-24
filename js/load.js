@@ -5,14 +5,13 @@ async function refreshInfo() {
   $('#info').html(`WAG tokens: ${balance.toLocaleString()}`);
   str = '';
   if (player[1] > 0) {
-    $('#info').append(
-      `<br>Room: ${player[1]} <i><a onclick="leave()">Leave</a></i><br>`
-    );
     players = await contract.getRoomInfo(player[1]).call();
+    $('#info').append(
+      `<br>Room: ${player[1]} <i><a onclick="leave()">Leave</a></i><br>Players: ${players[0].length}/5`
+    );
+
     host = players[0][0].toLowerCase() == acct[0];
-    str = `Room#${player.room} | ${players[0].length}-Players${
-      host ? ` | <a id="deal"onclick="deal()">Deal</a>` : ``
-    }`;
+    str = `${host ? ` | <a id="deal"onclick="deal()">Deal</a>` : ``}`;
     p = players[0];
     for (i = 0; i < p.length; i++) {
       str += `<div class="table">0x${p[i].substring(38)}<i>

@@ -16,6 +16,7 @@ async function refreshInfo() {
         p.length
       }</b>/5${host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``}`
     );
+    points = new Array();
     for (i = 0; i < p.length; i++) {
       str += `<div class="table">0x${p[i].substring(38)}<i>
         ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
@@ -30,7 +31,11 @@ async function refreshInfo() {
         if (p2[c2] == j || p2[c2 + 1] == j || p2[c2 + 2] == j) s3 = ' niu';
         s2 += p1[c1] < 1 ? `` : `<p class="cards c${p1[c1]}${s3}"></p>`;
       }
-      str += `${s2 == '' ? `<br>No previous results` : s2}</div>`;
+      p1 = await contract.player(p[i]).call();
+      points
+      str += `${
+        s2 == '' ? `<br>No previous results` : s2
+      }<p id="n${i}"></p></div>`;
     }
   } else {
     for (i = 1; i < 13; i++) {
@@ -160,7 +165,7 @@ async function load() {
           type: 'function',
         },
       ],
-      '0xc7300d5452ee8DCDB2A862E7f2C56B35e040E457'
+      '0x45332052182A16558d905BE653Ef77c79eBBbbF6'
     );
     contract = contract.methods;
     contract2 = new web3.Contract(
@@ -193,3 +198,5 @@ $(document).ready(function () {
     } else $('#connect').html('No Metamask');
   }, 1000);
 });
+
+

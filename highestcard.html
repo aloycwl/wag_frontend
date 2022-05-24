@@ -4,7 +4,6 @@
     <title>Niu Niu | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <script src="js/load.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       * {
@@ -109,39 +108,22 @@
           $('#info').append(
             `<br><br>Room: <b>${room}</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
               p.length
-            }</b>/5${
+            }</b>/20${
               host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``
             }`
           );
           for (i = 0; i < p.length; i++) {
             str += `<div class="table">0x${p[i].substring(38)}<i>${
-              p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''
-            }${host ? 'Host' : ''}</i><br><br>`;
-            p1 = players[1];
-            p2 = players[2];
-            p3 = players[3];
-            s2 = '';
-            c2 = i * 3;
-            for (j = 0; j < 5; j++) {
-              c1 = i * 5 + j;
-              s3 = '';
-              if (
-                (p2[c2] == j || p2[c2 + 1] == j || p2[c2 + 2] == j) &&
-                p2[c2] != p2[c2 + 1]
-              )
-                s3 = ' niu';
-              s2 += p1[c1] < 1 ? `` : `<p class="cards c${p1[c1]}${s3}"></p>`;
-            }
-            p1 = await contract.player(p[i]).call();
-            str += `${
-              s2 == '' ? `<br>No previous results` : s2
-            }<br><br><p id="n${i}">${
-              p3[i] > 0
-                ? `You got niu! <b>${p3[i]}</b> points ${
-                    Math.max(p3) == p3[i] ? `<br><b>***WINNER***</b>` : ``
-                  }`
-                : `No niu =(`
-            }</p></div>`;
+              p[i].toLowerCase() == acct[0] ? '<b> You</b>' : ''
+            }${host ? ' Host' : ''}</i><br><br>${
+              players[1][i] < 1
+                ? `No previous results`
+                : `<p class="cards c${players[1][i]}"></p>`
+            }${
+              Math.max(players[2]) == players[2][i]
+                ? `<br><br><b>***WINNER***</b>`
+                : ``
+            }`;
           }
         } else
           for (i = 1; i < 13; i++) {
@@ -177,7 +159,7 @@
         await contract.DEAL(room).send(frm);
       }
       async function join(a) {
-        a = $('#r99').length > 0 ? parseInt($('#99').val()) : a;
+        a = $('#r99').val() > 0 ? parseInt($('#99').val()) : a;
         b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
         str =
           b < 10
@@ -186,6 +168,8 @@
             ? 'Insufficent balance'
             : '';
         $('#load').html(str);
+        console.log(a);
+        console.log(b);
         if (str == '') {
           waitTxt(1);
           await contract.JOIN(a, b).send(frm);

@@ -178,7 +178,7 @@
         await contract.DEAL(player[1]).send(frm);
       }
       async function join(a) {
-        a = $('#r99').length > 0 ? parseInt($('#99').val()) : a;
+        a = $('#r99').val() > 0 ? parseInt($('#99').val()) : a;
         b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
         str =
           b < 10

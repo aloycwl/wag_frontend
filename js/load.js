@@ -6,12 +6,15 @@ async function refreshInfo() {
   str = '';
   if (player[1] > 0) {
     players = await contract.getRoomInfo(player[1]).call();
+    host = players[0][0].toLowerCase() == acct[0];
     $('#info').append(
-      `<br>Room: ${player[1]} <i><a onclick="leave()">Leave</a></i><br>Players: ${players[0].length}/5`
+      `<br><br>Room: <b>${
+        player[1]
+      }</b> <i><a onclick="leave()">Leave</a></i><br>Players: <b>${
+        players[0].length
+      }</b>/5${host ? `<br><a id="deal"onclick="deal()">Deal</a>` : ``}`
     );
 
-    host = players[0][0].toLowerCase() == acct[0];
-    str = `${host ? ` | <a id="deal"onclick="deal()">Deal</a>` : ``}`;
     p = players[0];
     for (i = 0; i < p.length; i++) {
       str += `<div class="table">0x${p[i].substring(38)}<i>

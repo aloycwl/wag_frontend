@@ -9,20 +9,18 @@ async function refreshInfo() {
       `<br>Room: ${player[1]} <i><a onclick="leave()">Leave</a></i><br>`
     );
     players = await contract.getRoomInfo(player[1]).call();
-    host = players.b[0].toLowerCase() == acct[0];
+    host = players[0][0].toLowerCase() == acct[0];
     str = `Room#${player.room} | ${players[0].length}-Players${
       host ? ` | <a id="deal"onclick="deal()">Deal</a>` : ``
     }`;
-    if (dealt) {
-      p = players[0];
-      for (i = 0; i < p.length; i++) {
-        str += `<div class="table">0x${p[i].substring(38)}<i>
+    p = players[0];
+    for (i = 0; i < p.length; i++) {
+      str += `<div class="table">0x${p[i].substring(38)}<i>
         ${p[i].toLowerCase() == acct[0] ? 'You' : ''}
         ${host ? 'Host' : ''}</i><br>`;
-        for (j = 0; j < 5; j++)
-          str += `<p class="cards c${players[i + 1][j]}"></p>`;
-        str += '</div>';
-      }
+      for (j = 0; j < 5; j++)
+        str += `<p class="cards c${players[i + 1][j]}"></p>`;
+      str += '</div>';
     }
   } else {
     waitTxt();

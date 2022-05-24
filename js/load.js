@@ -16,13 +16,13 @@ async function refreshInfo() {
         p.length
       }</b>/5${host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``}`
     );
-    points = new Array();
     for (i = 0; i < p.length; i++) {
       str += `<div class="table">0x${p[i].substring(38)}<i>
         ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
         ${host ? 'Host' : ''}</i><br><br>`;
       p1 = players[1];
       p2 = players[2];
+      p3 = players[3];
       s2 = '';
       c2 = i * 3;
       for (j = 0; j < 5; j++) {
@@ -32,10 +32,12 @@ async function refreshInfo() {
         s2 += p1[c1] < 1 ? `` : `<p class="cards c${p1[c1]}${s3}"></p>`;
       }
       p1 = await contract.player(p[i]).call();
-      points
+      points;
       str += `${
         s2 == '' ? `<br>No previous results` : s2
-      }<p id="n${i}"></p></div>`;
+      }<br><br><p id="n${i}">${
+        p3[i] > 0 ? `You got niu! <b>${p3[i]}</b> points ${Math.max(p3)==p3[i]?`<br><b>***WINNER***</b>`}` : `No niu =(`
+      }</p></div>`;
     }
   } else {
     for (i = 1; i < 13; i++) {
@@ -56,7 +58,7 @@ async function refreshInfo() {
       }<br>${str2}</div>`;
     }
   }
-  $('#room').append(str);
+  $('#room').html(str);
   x = -1;
   y = -142;
   for (i = 1; i < 53; i++) {
@@ -68,7 +70,7 @@ async function refreshInfo() {
 }
 async function deal() {
   waitTxt(1);
-  contract.DEAL(player[1]).send(frm);
+  await contract.DEAL(player[1]).send(frm);
   refreshInfo();
 }
 async function join(a) {
@@ -153,7 +155,7 @@ async function load() {
         {
           inputs: [u1],
           name: 'getRoomInfo',
-          outputs: [u4, u2, u2, u1],
+          outputs: [u4, u2, u2, u2],
           stateMutability: 'view',
           type: 'function',
         },
@@ -198,5 +200,3 @@ $(document).ready(function () {
     } else $('#connect').html('No Metamask');
   }, 1000);
 });
-
-

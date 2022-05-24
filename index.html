@@ -79,7 +79,8 @@
           />
         </td>
         <td class="menu">
-          <a href="index.html">Niu Niu</a> <a href="12num.html">12 Numbers</a
+          <a href="index.html" style="font-size: larger">Niu Niu</a>
+          <a href="12num.html">12 Numbers</a
           ><a href="highestcard.html">Highest Card</a>
         </td>
         <td class="side">
@@ -147,7 +148,6 @@
           for (i = 1; i < 13; i++) {
             rm = await contract.getRoomInfo(i).call();
             rl = rm[0].length;
-            i = i > 11 ? 12 : i;
             s = `<a onclick="join(${i})">`;
             str2 =
               rl == 0
@@ -157,7 +157,9 @@
                 : `${s}Join</a>`;
             str += `<div class="tables"><b>Room ${
               i < 12
-                ? `${i}</b><br>Bet size: ${rm[4]}<br>Players: ${rm[0].length}/5`
+                ? `${i}</b><br>Bet size: ${rm[4] / 1e18}<br>Players: ${
+                    rm[0].length
+                  }/5`
                 : `<input id="r99" placeholder="custom"><br><br>`
             }<br>${str2}</div>`;
           }

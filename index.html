@@ -144,7 +144,7 @@
                 : `No niu =(`
             }</p></div>`;
           }
-        } else {
+        } else
           for (i = 1; i < 13; i++) {
             rm = await contract.getRoomInfo(i).call();
             rl = rm[0].length;
@@ -163,7 +163,6 @@
                 : `${s}Join</a>`
             }</div>`;
           }
-        }
         $('#room').html(str);
         x = -1;
         y = -142;

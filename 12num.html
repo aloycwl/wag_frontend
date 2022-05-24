@@ -97,7 +97,7 @@
       balance = 0;
       async function refreshInfo() {
         waitTxt(1);
-        player = await contract.player(acct[0]).call();
+        player = await contract.GetPlayer(acct[0]).call();
         room = player[2];
         balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
@@ -105,54 +105,12 @@
         amt = [5, 10, 20, 50, 100, 200, 500, 1000];
         for (i = 0; i < 8; i++) {
           rmHist = await contract.GetRoomHistory(amt[i]).call();
-          s = `Previous winning number: ${rmHist[0]}, betted numbers:<br>`;
+          s = ``;
           for (j = 0; j < rmHist[1].length; j++) s += rmHist[1][j] + ', ';
-          str += `<div class="tables">Bet size: ${amt[i]}<br><input id="n${amt[i]}"placeholder="1-12">
-          <button onclick="bet(${amt[i]})">Bet</button><br><br>${s}</div>`;
+          str += `<div class="tables">Bet size: <b>${amt[i]}</b><br><br><input id="n${amt[i]}"placeholder="1-12">
+          <button onclick="bet(${amt[i]})">Bet</button><br><br>
+          Previous winning number: <b>${rmHist[0]}</b><br>Betted numbers:${s}</div>`;
         }
-        /*if (room > 0) {
-          players = await contract.getRoomInfo(room).call();
-          p = players[0];
-          host = p[0].toLowerCase() == acct[0];
-          $('#info').append(
-            `<br><br>Room: <b>${room}</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
-              p.length
-            }</b>/20${
-              host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``
-            }`
-          );
-          for (i = 0; i < p.length; i++) {
-            str += `<div class="table">0x${p[i].substring(38)}<i>${
-              p[i].toLowerCase() == acct[0] ? '<b> You</b>' : ''
-            }${host ? ' Host' : ''}</i><br><br>${
-              players[1][i] < 1
-                ? `No previous results`
-                : `<p class="cards c${players[1][i]}"></p>`
-            }${
-              Math.max(players[2]) == players[2][i]
-                ? `<br><br><b>***WINNER***</b>`
-                : ``
-            }`;
-          }
-        } else
-          for (i = 1; i < 13; i++) {
-            rm = await contract.getRoomInfo(i).call();
-            rl = rm[0].length;
-            s = `<a onclick="join(${i})">`;
-            str += `<div class="tables"><b>Room ${
-              i > 11
-                ? `<input id="r99" placeholder="custom"><br><br>`
-                : `${i}</b><br>Bet size: ${rm[3] / 1e18}<br>Players: ${
-                    rm[0].length
-                  }/20`
-            }<br>${
-              rl == 0
-                ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
-                : rl == 20
-                ? `Full`
-                : `${s}Join</a>`
-            }</div>`;
-          }*/
         $('#room').html(str);
         x = -1;
         y = -142;
@@ -260,7 +218,6 @@
             ],
             '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
           );
-          refreshInfo();
         }
       }
       load();

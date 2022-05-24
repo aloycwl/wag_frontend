@@ -98,17 +98,16 @@
       async function refreshInfo() {
         waitTxt(1);
         player = await contract.player(acct[0]).call();
+        room = player[2];
         balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
         str = '';
-        if (player[2] > 0) {
-          players = await contract.getRoomInfo(player[2]).call();
+        if (room > 0) {
+          players = await contract.getRoomInfo(room).call();
           p = players[0];
           host = p[0].toLowerCase() == acct[0];
           $('#info').append(
-            `<br><br>Room: <b>${
-              player[2]
-            }</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
+            `<br><br>Room: <b>${room}</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
               p.length
             }</b>/5${
               host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``
@@ -116,8 +115,8 @@
           );
           for (i = 0; i < p.length; i++) {
             str += `<div class="table">0x${p[i].substring(38)}<i>
-      ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
-      ${host ? 'Host' : ''}</i><br><br>`;
+        ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
+        ${host ? 'Host' : ''}</i><br><br>`;
             p1 = players[1];
             p2 = players[2];
             p3 = players[3];
@@ -157,9 +156,9 @@
                 : `${s}Join</a>`;
             str += `<div class="tables"><b>Room ${
               i < 12
-                ? `${i}</b><br>Bet size: ${rm[3] / 1e18}<br>Players: ${
+                ? `${i}</b><br>Bet size: ${rm[4] / 1e18}<br>Players: ${
                     rm[0].length
-                  }/20`
+                  }/5`
                 : `<input id="r99" placeholder="custom"><br><br>`
             }<br>${str2}</div>`;
           }
@@ -176,7 +175,7 @@
       }
       async function deal() {
         waitTxt(1);
-        await contract.DEAL(player[1]).send(frm);
+        await contract.DEAL(room).send(frm);
       }
       async function join(a) {
         b = $('#i' + a).length > 0 ? parseInt($('#i' + a).val()) : 10;
@@ -195,7 +194,7 @@
       }
       async function leave() {
         waitTxt(1);
-        await contract.LEAVE(player[1], acct[0]).send(frm);
+        await contract.LEAVE(room, acct[0]).send(frm);
         refreshInfo();
       }
       function waitTxt(a) {

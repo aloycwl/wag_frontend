@@ -88,29 +88,14 @@
           rh = await contract.GetRoomHistory(amt[i]).call();
           s = ``;
           for (j = 0; j < rh[1].length; j++)
-            s += rh[1][j] + (j > 11 ? '' : ', ');
+            s += rh[1][j] + (j > 10 ? '' : ', ');
           str += `<div id="d${amt[i]}"class="tables">
           Bet size: <b>${amt[i]}</b><br><br><input id="n${amt[i]}"placeholder="1-12">
           <button onclick="bet(${amt[i]})">Bet</button><br><br>
-          Current bets placed: ${rh[2]}<br>Previous winning number: <b>${rh[0]}</b><br>Previous betted numbers:
-          ${s}</div>`;
+          Current bets placed: ${rh[2]}<br>Past winning number: <b>${rh[0]}</b><br>[${s}]</div>`;
         }
         $('#room').html(str);
         waitTxt(0);
-      }
-      async function reloadBox(rh, rl) {
-        s = ``;
-        s2 = ``;
-        for (j = 0; j < rh[1].length; j++) s += rh[1][j] + (j > 11 ? '' : ', ');
-        s2 += `${rl ? `<div id="d${amt[i]}"class="tables">` : ``}Bet size: <b>${
-          amt[i]
-        }</b><br><br><input id="n${amt[i]}"placeholder="1-12">
-          <button onclick="bet(${amt[i]})">Bet</button><br><br>
-          Current bets placed: ${rh[2]}<br>Previous winning number: <b>${
-          rh[0]
-        }</b><br>Previous betted numbers:
-          ${s}${rl ? `</div>` : ``}`;
-        return s2;
       }
       async function bet(a) {
         waitTxt(1);

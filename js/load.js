@@ -43,8 +43,8 @@ async function refreshInfo() {
         }<br>${str}</div>`
       );
     }
-    loaded();
   }
+  loaded();
 }
 async function deal() {
   waitTxt();
@@ -55,7 +55,7 @@ async function join(a) {
   str = '';
   if (a == 0 && b < 10) str = 'Minimum bet size is 10';
   if (balance < b) str = 'Insufficent balance';
-  $('#room').html(str);
+  $('#load').html(str);
   if (str == '') {
     waitTxt();
     await contract.JOIN(r, b).send(frm);
@@ -68,7 +68,7 @@ async function leave() {
   refreshInfo();
 }
 function waitTxt() {
-  $('#load').html(' <i>Loading...</i>');
+  $('#load').html('Loading...');
 }
 function loaded() {
   $('#load').html('');

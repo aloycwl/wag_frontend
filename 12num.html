@@ -48,7 +48,6 @@
         for (i = 0; i < player[0].length; i++)
           str += `[${player[0][i]}/${player[1][i]}] `;
         $('#info').html(str);
-
         str = '';
         for (i = 0; i < 8; i++) {
           rh = await contract.GetRoomHistory(amt[i]).call();

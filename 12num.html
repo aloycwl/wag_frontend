@@ -143,9 +143,9 @@
             if (d.length > 0) {
               $('#connect').hide();
               $('#root').show();
-              gB2 = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
-              if (gB2 != balance) {
-                balance = gB2;
+              b = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+              if (b != balance) {
+                balance = b;
                 refreshInfo();
               }
             } else $('#connect').show();

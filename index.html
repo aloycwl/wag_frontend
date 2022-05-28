@@ -141,82 +141,50 @@
         await contract.LEAVE(player[1], acct[0]).send(frm);
         refreshInfo();
       }
-      async function load() {
-        if (typeof ethereum != 'undefined') {
-          web3 = new Web3(ethereum);
-          web3 = web3.eth;
-          acct = await ethereum.request({ method: 'eth_requestAccounts' });
-          frm = { from: acct[0] };
-          if ((await web3.net.getId()) != 4) {
-            await ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x4' }],
-            });
-            location.reload();
-          }
-          contract = new web3.Contract(
-            [
-              {
-                inputs: [u1],
-                name: 'DEAL',
-                outputs: [],
-                stateMutability: 'nonpayable',
-                type: 'function',
-              },
-              {
-                inputs: [u1, u1],
-                name: 'JOIN',
-                outputs: [],
-                stateMutability: 'nonpayable',
-                type: 'function',
-              },
-              {
-                inputs: [u1, u3],
-                name: 'LEAVE',
-                outputs: [],
-                stateMutability: 'nonpayable',
-                type: 'function',
-              },
-              {
-                inputs: [u1],
-                name: 'getRoomInfo',
-                outputs: [u4, u2, u2, u2, u1],
-                stateMutability: 'view',
-                type: 'function',
-              },
-              {
-                inputs: [u3],
-                name: 'player',
-                outputs: [u1, u1],
-                stateMutability: 'view',
-                type: 'function',
-              },
-              {
-                inputs: [u1],
-                name: 'room',
-                outputs: [u1],
-                stateMutability: 'view',
-                type: 'function',
-              },
-            ],
-            '0x2319E667FA8EF7cfA3eE4f2Aa1E6Fb8DC46ab617'
-          );
-          contract = contract.methods;
-          contract2 = new web3.Contract(
-            [
-              {
-                inputs: [u3],
-                name: 'balanceOf',
-                outputs: [u1],
-                stateMutability: 'view',
-                type: 'function',
-              },
-            ],
-            '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
-          );
-        }
-      }
-      load();
+      load([
+        {
+          inputs: [u1],
+          name: 'DEAL',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [u1, u1],
+          name: 'JOIN',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [u1, u3],
+          name: 'LEAVE',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [u1],
+          name: 'getRoomInfo',
+          outputs: [u4, u2, u2, u2, u1],
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          inputs: [u3],
+          name: 'player',
+          outputs: [u1, u1],
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          inputs: [u1],
+          name: 'room',
+          outputs: [u1],
+          stateMutability: 'view',
+          type: 'function',
+        },
+      ]);
     </script>
   </body>
 </html>

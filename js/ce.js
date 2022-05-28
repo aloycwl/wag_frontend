@@ -19,6 +19,18 @@ u4 = {
   name: '',
   type: 'address[]',
 };
+contract2 = new web3.Contract(
+  [
+    {
+      inputs: [u3],
+      name: 'balanceOf',
+      outputs: [u1],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ],
+  '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
+);
 $(document).ready(function () {
   setInterval(async function () {
     if (typeof ethereum != 'undefined') {

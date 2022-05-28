@@ -4,9 +4,12 @@
     <title>12 Numbers | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <script src="js/ce.js"></script>
+    <script defer src="js/ce.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://aloycwl.github.io/wag_frontend/css/wag.css">
+    <link
+      rel="stylesheet"
+      href="https://aloycwl.github.io/wag_frontend/css/wag.css"
+    />
   </head>
   <body>
     <table>
@@ -63,9 +66,6 @@
       async function bet(a) {
         waitTxt(1);
         await contract.BET(a, $('#n' + a).val()).send(frm);
-      }
-      function waitTxt(a) {
-        $('#load').html(a > 0 ? 'Loading...' : '');
       }
       async function load() {
         if (typeof ethereum != 'undefined') {

@@ -25,7 +25,7 @@ u4 = {
 function waitTxt(a) {
   $('#load').html(a > 0 ? 'Loading...' : '');
 }
-async function load(a) {
+async function load(a, b) {
   if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
     web3 = web3.eth;

@@ -1,4 +1,24 @@
 //Casino Essential
+u1 = {
+  internalType: 'uint256',
+  name: '',
+  type: 'uint256',
+};
+u2 = {
+  internalType: 'uint256[]',
+  name: '',
+  type: 'uint256[]',
+};
+u3 = {
+  internalType: 'address',
+  name: '',
+  type: 'address',
+};
+u4 = {
+  internalType: 'address[]',
+  name: '',
+  type: 'address[]',
+};
 $(document).ready(function () {
   setInterval(async function () {
     if (typeof ethereum != 'undefined') {

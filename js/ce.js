@@ -1,4 +1,7 @@
 //Casino Essential
+$('head').append(
+  '<meta name="viewport"content="width=device-width,initial-scale=1.0"><link rel="stylesheet"href="https://aloycwl.github.io/wag_frontend/css/wag.css">'
+);
 u1 = {
   internalType: 'uint256',
   name: '',

@@ -25,6 +25,35 @@ u4 = {
 function waitTxt(a) {
   $('#load').html(a > 0 ? 'Loading...' : '');
 }
+async function load(a,b) {
+  if (typeof ethereum != 'undefined') {
+    web3 = new Web3(ethereum);
+    web3 = web3.eth;
+    acct = await ethereum.request({ method: 'eth_requestAccounts' });
+    frm = { from: acct[0] };
+    if ((await web3.net.getId()) != 4) {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x4' }],
+      });
+      location.reload();
+    }
+    contract = new web3.Contract(a, b);
+    contract = contract.methods;
+    contract2 = new web3.Contract(
+      [
+        {
+          inputs: [u3],
+          name: 'balanceOf',
+          outputs: [u1],
+          stateMutability: 'view',
+          type: 'function',
+        },
+      ],
+      '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
+    );
+  }
+}
 $(document).ready(function () {
   setInterval(async function () {
     if (typeof ethereum != 'undefined') {

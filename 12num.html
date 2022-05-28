@@ -4,7 +4,7 @@
     <title>12 Numbers | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <script defer src="js/ce.js"></script>
+    <script src="js/ce.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
@@ -67,49 +67,30 @@
         waitTxt(1);
         await contract.BET(a, $('#n' + a).val()).send(frm);
       }
-      async function load() {
-        if (typeof ethereum != 'undefined') {
-          web3 = new Web3(ethereum);
-          web3 = web3.eth;
-          acct = await ethereum.request({ method: 'eth_requestAccounts' });
-          frm = { from: acct[0] };
-          if ((await web3.net.getId()) != 4) {
-            await ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x4' }],
-            });
-            location.reload();
-          }
-          contract = new web3.Contract(
-            [
-              {
-                inputs: [u1, u1],
-                name: 'BET',
-                outputs: [],
-                stateMutability: 'nonpayable',
-                type: 'function',
-              },
-              {
-                inputs: [u3],
-                name: 'GetPlayer',
-                outputs: [u2, u2],
-                stateMutability: 'view',
-                type: 'function',
-              },
-              {
-                inputs: [u1],
-                name: 'GetRoomHistory',
-                outputs: [u1, u2, u1],
-                stateMutability: 'view',
-                type: 'function',
-              },
-            ],
-            '0xDC39FA005d86B70F56f16B975B295DDFFcDc8272'
-          );
-          contract = contract.methods;
-        }
-      }
-      load();
+
+      load([
+        {
+          inputs: [u1, u1],
+          name: 'BET',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+        {
+          inputs: [u3],
+          name: 'GetPlayer',
+          outputs: [u2, u2],
+          stateMutability: 'view',
+          type: 'function',
+        },
+        {
+          inputs: [u1],
+          name: 'GetRoomHistory',
+          outputs: [u1, u2, u1],
+          stateMutability: 'view',
+          type: 'function',
+        },
+      ]);
     </script>
   </body>
 </html>

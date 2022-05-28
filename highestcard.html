@@ -4,9 +4,12 @@
     <title>Highest Card | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <script defer src="js/ce.js"></script>
+    <script src="js/ce.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://aloycwl.github.io/wag_frontend/css/wag.css">
+    <link
+      rel="stylesheet"
+      href="https://aloycwl.github.io/wag_frontend/css/wag.css"
+    />
   </head>
   <body>
     <table>
@@ -182,6 +185,18 @@
             '0x6c4b4AbeAd0b39e7B06fCF0000E541487773fC59'
           );
           contract = contract.methods;
+          contract2 = new web3.Contract(
+            [
+              {
+                inputs: [u3],
+                name: 'balanceOf',
+                outputs: [u1],
+                stateMutability: 'view',
+                type: 'function',
+              },
+            ],
+            '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
+          );
         }
       }
       load();

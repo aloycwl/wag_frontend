@@ -34,6 +34,7 @@ contract2 = new web3.Contract(
 function waitTxt(a) {
   $('#load').html(a > 0 ? 'Loading...' : '');
 }
+
 $(document).ready(function () {
   setInterval(async function () {
     if (typeof ethereum != 'undefined') {

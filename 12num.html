@@ -4,6 +4,7 @@
     <title>12 Numbers | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
+    <script defer src="js/ce.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://aloycwl.github.io/wag_frontend/css/wag.css">
   </head>
@@ -136,22 +137,6 @@
         }
       }
       load();
-      $(document).ready(function () {
-        setInterval(async function () {
-          if (typeof ethereum != 'undefined') {
-            d = await web3.getAccounts();
-            if (d.length > 0) {
-              $('#connect').hide();
-              $('#root').show();
-              b = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
-              if (b != balance) {
-                balance = b;
-                refreshInfo();
-              }
-            } else $('#connect').show();
-          } else $('#connect').html('No Metamask');
-        }, 1000);
-      });
     </script>
   </body>
 </html>

@@ -30,6 +30,11 @@ async function LB() {
 }
 async function load(a, b) {
   if (typeof ethereum != 'undefined') {
+    web3a = new Web3(
+      'https://eth-rinkeby.alchemyapi.io/v2/xneL9EV87zUlVocEVcyDT5tqp4LZE0Fy'
+    );
+    web3a = web3a.eth;
+
     web3 = new Web3(ethereum);
     web3 = web3.eth;
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
@@ -43,7 +48,9 @@ async function load(a, b) {
     }
     contract = new web3.Contract(a, b);
     contract = contract.methods;
-    contract2 = new web3.Contract(
+    contracta = new web3a.Contract(a, b);
+    contracta = contracta.methods;
+    contract2 = new web3a.Contract(
       [
         {
           inputs: [u3],

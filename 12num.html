@@ -39,7 +39,7 @@
       CHAIN = 4;
       CSS = 'https://aloycwl.github.io/wag_frontend/css/wag.css';
       async function refreshInfo() {
-        waitTxt(1);
+        waitTxt(1,'load');
         player = await contracta.GetPlayer(acct).call();
         balance = await LB();
         amt = [5, 10, 20, 50, 100, 200, 500, 1000];
@@ -59,14 +59,11 @@
             Current bets placed: ${rh[2]}<br>Past winning number: <b>${rh[0]}</b><br><i>[${s}]</i></div>`;
         }
         $('#room').html(str);
-        waitTxt(0);
+        waitTxt(0,'load');
       }
       async function bet(a) {
-        waitTxt(1);
+        waitTxt(1,'load');
         await contract.BET(a, $('#n' + a).val()).send(frm);
-      }
-      function waitTxt(a) {
-        $('#load').html(a > 0 ? 'Loading...' : '');
       }
       (async () => {
         await load(

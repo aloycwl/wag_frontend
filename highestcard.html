@@ -3,9 +3,8 @@
   <head>
     <title>Highest Card | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
-    <script src="https://aloycwl.github.io/js/cdn/web3e.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <script src="js/ce.js"></script>
+    <script src="https://aloycwl.github.io/js/cdn/web3ac.js"></script>
   </head>
   <body>
     <table>
@@ -33,6 +32,11 @@
     </div>
     <script>
       balance = 0;
+      WB =
+        'https://eth-rinkeby.alchemyapi.io/v2/xneL9EV87zUlVocEVcyDT5tqp4LZE0Fy';
+      CA2 = '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1';
+      CHAIN = 4;
+      CSS = 'https://aloycwl.github.io/wag_frontend/css/wag.css';
       async function refreshInfo() {
         waitTxt(1);
         player = await contracta.player(acct).call();
@@ -120,54 +124,75 @@
         await contract.LEAVE(room, acct).send(frm);
         refreshInfo();
       }
-      load(
-        [
-          {
-            inputs: [u1],
-            name: 'DEAL',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u1, u1],
-            name: 'JOIN',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u1, u3],
-            name: 'LEAVE',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u1],
-            name: 'getRoomInfo',
-            outputs: [u4, u2, u2, u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-          {
-            inputs: [u3],
-            name: 'player',
-            outputs: [u1, u1, u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-          {
-            inputs: [u1],
-            name: 'room',
-            outputs: [u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-        ],
-        '0x6c4b4AbeAd0b39e7B06fCF0000E541487773fC59'
-      );
-      load2();
+      function waitTxt(a) {
+        $('#load').html(a > 0 ? 'Loading...' : '');
+      }
+      (async () => {
+        await load(
+          [
+            {
+              inputs: [u1],
+              name: 'DEAL',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u1, u1],
+              name: 'JOIN',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u1, u3],
+              name: 'LEAVE',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u1],
+              name: 'getRoomInfo',
+              outputs: [u4, u2, u2, u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+            {
+              inputs: [u3],
+              name: 'player',
+              outputs: [u1, u1, u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+            {
+              inputs: [u1],
+              name: 'room',
+              outputs: [u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+          ],
+          '0x6c4b4AbeAd0b39e7B06fCF0000E541487773fC59'
+        );
+        load2();
+      })();
+      $(document).ready(function () {
+        setInterval(async function () {
+          if (typeof ethereum != 'undefined') {
+            d = await web3.getAccounts();
+            if (d.length > 0) {
+              $('#connect').hide();
+              $('#root').show();
+              b = await LB();
+              if (b != balance) {
+                balance = b;
+                refreshInfo();
+              }
+            } else $('#connect').show();
+          } else $('#connect').html('No Metamask');
+        }, 1000);
+      });
     </script>
   </body>
 </html>

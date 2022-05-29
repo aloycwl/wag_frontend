@@ -5,7 +5,6 @@
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/web3ac.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   </head>
   <body>
     <table>
@@ -55,9 +54,9 @@
           for (j = 0; j < rh[1].length; j++)
             s += rh[1][j] + (j > 10 ? '' : ', ');
           str += `<div id="d${amt[i]}"class="tables">
-          Bet size: <b>${amt[i]}</b><br><br><input id="n${amt[i]}"placeholder="1-12">
-          <button onclick="bet(${amt[i]})">Bet</button><br><br>
-          Current bets placed: ${rh[2]}<br>Past winning number: <b>${rh[0]}</b><br><i>[${s}]</i></div>`;
+            Bet size: <b>${amt[i]}</b><br><br><input id="n${amt[i]}"placeholder="1-12">
+            <button onclick="bet(${amt[i]})">Bet</button><br><br>
+            Current bets placed: ${rh[2]}<br>Past winning number: <b>${rh[0]}</b><br><i>[${s}]</i></div>`;
         }
         $('#room').html(str);
         waitTxt(0);
@@ -69,33 +68,35 @@
       function waitTxt(a) {
         $('#load').html(a > 0 ? 'Loading...' : '');
       }
-      await load(
-        [
-          {
-            inputs: [u1, u1],
-            name: 'BET',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u3],
-            name: 'GetPlayer',
-            outputs: [u2, u2],
-            stateMutability: 'view',
-            type: 'function',
-          },
-          {
-            inputs: [u1],
-            name: 'GetRoomHistory',
-            outputs: [u1, u2, u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-        ],
-        '0xDC39FA005d86B70F56f16B975B295DDFFcDc8272'
-      );
-      load2();
+      (async () => {
+        await load(
+          [
+            {
+              inputs: [u1, u1],
+              name: 'BET',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u3],
+              name: 'GetPlayer',
+              outputs: [u2, u2],
+              stateMutability: 'view',
+              type: 'function',
+            },
+            {
+              inputs: [u1],
+              name: 'GetRoomHistory',
+              outputs: [u1, u2, u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+          ],
+          '0xDC39FA005d86B70F56f16B975B295DDFFcDc8272'
+        );
+        load2();
+      })();
       $(document).ready(function () {
         setInterval(async function () {
           if (typeof ethereum != 'undefined') {

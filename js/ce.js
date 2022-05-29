@@ -25,20 +25,6 @@ u4 = {
 function waitTxt(a) {
   $('#load').html(a > 0 ? 'Loading...' : '');
 }
-async function LB() {
-  //Load Balance
-  return (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
-}
-async function LP() {
-  //Load Player
-  waitTxt(1);
-  player = await contract.GetPlayer(acct[0]).call();
-  balance = await LB();
-}
-function FB() {
-  //Format Balance
-  return balance.toFixed(2).toLocaleString();
-}
 async function load(a, b) {
   if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
@@ -75,7 +61,7 @@ $(document).ready(function () {
       if (d.length > 0) {
         $('#connect').hide();
         $('#root').show();
-        b = await LB();
+        b = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
         if (b != balance) {
           balance = b;
           refreshInfo();

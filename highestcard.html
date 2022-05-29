@@ -34,13 +34,13 @@
       balance = 0;
       async function refreshInfo() {
         waitTxt(1);
-        player = await contract.player(acct[0]).call();
+        player = await contracta.player(acct[0]).call();
         balance = await LB();
         room = player[2];
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
         str = '';
         if (room > 0) {
-          players = await contract.getRoomInfo(room).call();
+          players = await contracta.getRoomInfo(room).call();
           p = players[0];
           host = p[0].toLowerCase() == acct[0];
           $('#info').append(
@@ -65,7 +65,7 @@
           }
         } else
           for (i = 1; i < 13; i++) {
-            rm = await contract.getRoomInfo(i).call();
+            rm = await contracta.getRoomInfo(i).call();
             rl = rm[0].length;
             s = `<a onclick="join(${i})">`;
             str += `<div class="tables"><b>Room ${

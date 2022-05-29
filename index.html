@@ -3,9 +3,8 @@
   <head>
     <title>Niu Niu | WAG</title>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
-    <script src="https://aloycwl.github.io/js/cdn/web3e.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
-    <script src="js/ce.js"></script>
+    <script src="https://aloycwl.github.io/js/cdn/web3ac.js"></script>
   </head>
   <body>
     <table>
@@ -34,8 +33,13 @@
     </div>
     <script>
       balance = 0;
+      WB =
+        'https://eth-rinkeby.alchemyapi.io/v2/xneL9EV87zUlVocEVcyDT5tqp4LZE0Fy';
+      CA2 = '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1';
+      CHAIN = 4;
+      CSS = 'https://aloycwl.github.io/wag_frontend/css/wag.css';
       async function refreshInfo() {
-        waitTxt(1);
+        waitTxt(1, 'load');
         player = await contracta.player(acct).call();
         balance = await LB();
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
@@ -110,10 +114,10 @@
           if (i % 13 == 0) (x = -1), (y = i == 25 ? -212 : i == 38 ? -2 : -72);
           else x -= 50;
         }
-        waitTxt(0);
+        waitTxt(0, 'load');
       }
       async function deal() {
-        waitTxt(1);
+        waitTxt(1, 'load');
         await contract.DEAL(player[1]).send(frm);
       }
       async function join(a) {
@@ -127,64 +131,82 @@
             : '';
         $('#load').html(str);
         if (str == '') {
-          waitTxt(1);
+          waitTxt(1, 'load');
           await contract.JOIN(a, b).send(frm);
           refreshInfo();
         }
       }
       async function leave() {
-        waitTxt(1);
+        waitTxt(1, 'load');
         await contract.LEAVE(player[1], acct).send(frm);
         refreshInfo();
       }
-      load(
-        [
-          {
-            inputs: [u1],
-            name: 'DEAL',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u1, u1],
-            name: 'JOIN',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u1, u3],
-            name: 'LEAVE',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
-          },
-          {
-            inputs: [u1],
-            name: 'getRoomInfo',
-            outputs: [u4, u2, u2, u2, u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-          {
-            inputs: [u3],
-            name: 'player',
-            outputs: [u1, u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-          {
-            inputs: [u1],
-            name: 'room',
-            outputs: [u1],
-            stateMutability: 'view',
-            type: 'function',
-          },
-        ],
-        '0x2319E667FA8EF7cfA3eE4f2Aa1E6Fb8DC46ab617'
-      );
-      load2();
+      (async () => {
+        await load(
+          [
+            {
+              inputs: [u1],
+              name: 'DEAL',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u1, u1],
+              name: 'JOIN',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u1, u3],
+              name: 'LEAVE',
+              outputs: [],
+              stateMutability: 'nonpayable',
+              type: 'function',
+            },
+            {
+              inputs: [u1],
+              name: 'getRoomInfo',
+              outputs: [u4, u2, u2, u2, u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+            {
+              inputs: [u3],
+              name: 'player',
+              outputs: [u1, u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+            {
+              inputs: [u1],
+              name: 'room',
+              outputs: [u1],
+              stateMutability: 'view',
+              type: 'function',
+            },
+          ],
+          '0x2319E667FA8EF7cfA3eE4f2Aa1E6Fb8DC46ab617'
+        );
+        load2();
+      })();
+      $(document).ready(function () {
+        setInterval(async function () {
+          if (typeof ethereum != 'undefined') {
+            d = await web3.getAccounts();
+            if (d.length > 0) {
+              $('#connect').hide();
+              $('#root').show();
+              b = await LB();
+              if (b != balance) {
+                balance = b;
+                refreshInfo();
+              }
+            } else $('#connect').show();
+          } else $('#connect').html('No Metamask');
+        }, 1000);
+      });
     </script>
   </body>
 </html>

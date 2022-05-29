@@ -38,7 +38,7 @@
       CHAIN = 4;
       CSS = 'https://aloycwl.github.io/wag_frontend/css/wag.css';
       async function refreshInfo() {
-        waitTxt(1);
+        waitTxt(1,'load');
         player = await contracta.player(acct).call();
         balance = await LB();
         room = player[2];
@@ -95,10 +95,10 @@
           if (i % 13 == 0) (x = -1), (y = i == 25 ? -212 : i == 38 ? -2 : -72);
           else x -= 50;
         }
-        waitTxt(0);
+        waitTxt(0,'load');
       }
       async function deal() {
-        waitTxt(1);
+        waitTxt(1,'load');
         await contract.DEAL(room).send(frm);
       }
       async function join(a) {
@@ -114,18 +114,15 @@
         console.log(a);
         console.log(b);
         if (str == '') {
-          waitTxt(1);
+          waitTxt(1,'load');
           await contract.JOIN(a, b).send(frm);
           refreshInfo();
         }
       }
       async function leave() {
-        waitTxt(1);
+        waitTxt(1,'load');
         await contract.LEAVE(room, acct).send(frm);
         refreshInfo();
-      }
-      function waitTxt(a) {
-        $('#load').html(a > 0 ? 'Loading...' : '');
       }
       (async () => {
         await load(

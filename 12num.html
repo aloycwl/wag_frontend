@@ -34,11 +34,8 @@
     <script>
       balance = 0;
       async function refreshInfo() {
-        waitTxt(1);
-        player = await contract.GetPlayer(acct[0]).call();
-        room = player[2];
+        await LP();
         amt = [5, 10, 20, 50, 100, 200, 500, 1000];
-        balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
         str = `WAG: <b>${balance.toLocaleString()}</b><br>`;
         for (i = 0; i < player[0].length; i++)
           str += `[${player[0][i]}/${player[1][i]}] `;

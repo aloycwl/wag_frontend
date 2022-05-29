@@ -34,9 +34,7 @@
     <script>
       balance = 0;
       async function refreshInfo() {
-        waitTxt(1);
-        player = await contract.player(acct[0]).call();
-        balance = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+        await LP();
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
         str = '';
         if (player[1] > 0) {

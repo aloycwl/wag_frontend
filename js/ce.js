@@ -37,7 +37,9 @@ async function load(a, b) {
 
     web3 = new Web3(ethereum);
     web3 = web3.eth;
+
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
+    acct = acct[0];
     frm = { from: acct[0] };
     if ((await web3.net.getId()) != 4) {
       await ethereum.request({
@@ -46,6 +48,7 @@ async function load(a, b) {
       });
       location.reload();
     }
+
     contract = new web3.Contract(a, b);
     contract = contract.methods;
     contracta = new web3a.Contract(a, b);

@@ -35,14 +35,14 @@
       balance = 0;
       async function refreshInfo() {
         waitTxt(1);
-        player = await contracta.player(acct[0]).call();
+        player = await contracta.player(acct).call();
         balance = await LB();
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
         str = '';
         if (player[1] > 0) {
           players = await contracta.getRoomInfo(player[1]).call();
           p = players[0];
-          host = p[0].toLowerCase() == acct[0];
+          host = p[0].toLowerCase() == acct;
           $('#info').append(
             `<br><br>Room: <b>${
               player[1]
@@ -54,7 +54,7 @@
           );
           for (i = 0; i < p.length; i++) {
             str += `<div class="table">0x${p[i].substring(38)}<i>
-        ${p[i].toLowerCase() == acct[0] ? '<b>You</b>' : ''}
+        ${p[i].toLowerCase() == acct ? '<b>You</b>' : ''}
         ${host ? 'Host' : ''}</i><br><br>`;
             p1 = players[1];
             p2 = players[2];
@@ -133,7 +133,7 @@
       }
       async function leave() {
         waitTxt(1);
-        await contract.LEAVE(player[1], acct[0]).send(frm);
+        await contract.LEAVE(player[1], acct).send(frm);
         refreshInfo();
       }
       load(

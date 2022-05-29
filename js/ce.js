@@ -25,6 +25,9 @@ u4 = {
 function waitTxt(a) {
   $('#load').html(a > 0 ? 'Loading...' : '');
 }
+async function LB() {
+  return (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+}
 async function load(a, b) {
   if (typeof ethereum != 'undefined') {
     web3 = new Web3(ethereum);
@@ -61,7 +64,7 @@ $(document).ready(function () {
       if (d.length > 0) {
         $('#connect').hide();
         $('#root').show();
-        b = (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+        b = await LB();
         if (b != balance) {
           balance = b;
           refreshInfo();

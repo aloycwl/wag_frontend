@@ -2,6 +2,11 @@
 $('head').append(
   '<meta name="viewport"content="width=device-width,initial-scale=1.0"><link rel="stylesheet"href="https://aloycwl.github.io/wag_frontend/css/wag.css">'
 );
+const WB =
+    'https://eth-rinkeby.alchemyapi.io/v2/xneL9EV87zUlVocEVcyDT5tqp4LZE0Fy',
+  CA2 = '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1',
+  CHAIN = 4;
+
 u1 = {
   internalType: 'uint256',
   name: '',
@@ -31,30 +36,24 @@ async function LB() {
 }
 async function load(a, b) {
   if (typeof ethereum != 'undefined') {
-    web3a = new Web3(
-      'https://eth-rinkeby.alchemyapi.io/v2/xneL9EV87zUlVocEVcyDT5tqp4LZE0Fy'
-    );
+    web3a = new Web3(WB);
     web3a = web3a.eth;
     web3 = new Web3(ethereum);
     web3 = web3.eth;
-
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
     acct = acct[0];
     frm = { from: acct };
-    if ((await web3.net.getId()) != 4) {
+    if ((await web3.net.getId()) != CHAIN) {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x4' }],
+        params: [{ chainId: '0x' + CHAIN }],
       });
       location.reload();
     }
-
     contract = new web3.Contract(a, b);
     contract = contract.methods;
     contracta = new web3a.Contract(a, b);
     contracta = contracta.methods;
-
-    load2();
   }
 }
 async function load2() {
@@ -68,7 +67,7 @@ async function load2() {
         type: 'function',
       },
     ],
-    '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
+    CA2
   );
 }
 $(document).ready(function () {

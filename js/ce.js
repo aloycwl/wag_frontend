@@ -26,7 +26,8 @@ function waitTxt(a) {
   $('#load').html(a > 0 ? 'Loading...' : '');
 }
 async function LB() {
-  return (await contract2.methods.balanceOf(acct[0]).call()) / 1e18;
+  //Load Balance
+  return (await contract2.methods.balanceOf(acct).call()) / 1e18;
 }
 async function load(a, b) {
   if (typeof ethereum != 'undefined') {
@@ -34,13 +35,12 @@ async function load(a, b) {
       'https://eth-rinkeby.alchemyapi.io/v2/xneL9EV87zUlVocEVcyDT5tqp4LZE0Fy'
     );
     web3a = web3a.eth;
-
     web3 = new Web3(ethereum);
     web3 = web3.eth;
 
     acct = await ethereum.request({ method: 'eth_requestAccounts' });
     acct = acct[0];
-    frm = { from: acct[0] };
+    frm = { from: acct };
     if ((await web3.net.getId()) != 4) {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -53,19 +53,23 @@ async function load(a, b) {
     contract = contract.methods;
     contracta = new web3a.Contract(a, b);
     contracta = contracta.methods;
-    contract2 = new web3a.Contract(
-      [
-        {
-          inputs: [u3],
-          name: 'balanceOf',
-          outputs: [u1],
-          stateMutability: 'view',
-          type: 'function',
-        },
-      ],
-      '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
-    );
+
+    await load2();
   }
+}
+async function load2() {
+  contract2 = new web3a.Contract(
+    [
+      {
+        inputs: [u3],
+        name: 'balanceOf',
+        outputs: [u1],
+        stateMutability: 'view',
+        type: 'function',
+      },
+    ],
+    '0xFf53E86755fddadFB671a338d4D5b3CacD9c07c1'
+  );
 }
 $(document).ready(function () {
   setInterval(async function () {

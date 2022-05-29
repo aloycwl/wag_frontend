@@ -54,7 +54,7 @@ async function load(a, b) {
     contracta = new web3a.Contract(a, b);
     contracta = contracta.methods;
 
-    await load2();
+    load2();
   }
 }
 async function load2() {

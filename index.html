@@ -118,7 +118,7 @@
       }
       async function deal() {
         waitTxt(1, 'load');
-        await contract.DEAL(player[1]).send(frm);
+        await contract.DEAL(player[1]).send(FA);
       }
       async function join(a) {
         a = $('#r99').val() > 0 ? parseInt($('#99').val()) : a;
@@ -132,13 +132,13 @@
         $('#load').html(str);
         if (str == '') {
           waitTxt(1, 'load');
-          await contract.JOIN(a, b).send(frm);
+          await contract.JOIN(a, b).send(FA);
           refreshInfo();
         }
       }
       async function leave() {
         waitTxt(1, 'load');
-        await contract.LEAVE(player[1], acct).send(frm);
+        await contract.LEAVE(player[1], acct).send(FA);
         refreshInfo();
       }
       (async () => {
@@ -189,7 +189,7 @@
           ],
           '0x2319E667FA8EF7cfA3eE4f2Aa1E6Fb8DC46ab617'
         );
-        load2();
+        await load2();
       })();
       $(document).ready(function () {
         setInterval(async function () {

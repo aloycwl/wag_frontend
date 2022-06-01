@@ -115,6 +115,7 @@
           else x -= 50;
         }
         waitTxt(0, 'load');
+        console.log('count');
       }
       async function deal() {
         waitTxt(1, 'load');
@@ -190,6 +191,7 @@
           '0x2319E667FA8EF7cfA3eE4f2Aa1E6Fb8DC46ab617'
         );
         await load2();
+        refreshInfo();
       })();
       $(document).ready(function () {
         setInterval(async function () {
@@ -199,13 +201,10 @@
               $('#connect').hide();
               $('#root').show();
               b = await LB();
-              if (b != balance) {
-                balance = b;
-                refreshInfo();
-              }
+              if (b != balance) await refreshInfo();
             } else $('#connect').show();
           } else $('#connect').html('No Metamask');
-        }, 1000);
+        }, 2000);
       });
     </script>
   </body>

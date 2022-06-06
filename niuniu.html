@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Highest Card | WAG</title>
+    <title>Niu Niu | WAG</title>
+    <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/web3.min.js"></script>
     <script src="https://aloycwl.github.io/js/cdn/web3ac.js"></script>
-    <script src="https://aloycwl.github.io/js/cdn/jquery.min.js"></script>
   </head>
   <body>
     <table>
       <tr>
         <td width="500px">
-        <a href="/"><img
-          src="https://aloycwl.github.io/wag_frontend/img/logo.png"
-          width="341"
-          height="128"
-        /></a>
+          <a href="/"
+            ><img
+              src="https://aloycwl.github.io/wag_frontend/img/logo.png"
+              width="341"
+              height="128"
+          /></a>
         </td>
         <td class="menu">
-          <a href="niuniu.html">Niu Niu</a> <a href="12num.html">12 Numbers</a>
-          <a href="highestcard.html" style="font-size: larger">Highest Card</a>
+          <a href="niuniu.html" style="font-size: larger">Niu Niu</a>
+          <a href="12num.html">12 Numbers</a
+          ><a href="highestcard.html">Highest Card</a>
         </td>
         <td class="side">
           <a id="connect" onclick="load();">Connect</a>
@@ -41,32 +43,50 @@
         waitTxt(1, 'load');
         player = await contracta.player(acct).call();
         balance = await LB();
-        room = player[2];
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
         str = '';
-        if (room > 0) {
-          players = await contracta.getRoomInfo(room).call();
+        if (player[1] > 0) {
+          players = await contracta.getRoomInfo(player[1]).call();
           p = players[0];
           host = p[0].toLowerCase() == acct;
           $('#info').append(
-            `<br><br>Room: <b>${room}</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
+            `<br><br>Room: <b>${
+              player[1]
+            }</b> <i>(<a onclick="leave()">Leave</a>)</i><br>Players: <b>${
               p.length
-            }</b>/20${
+            }</b>/5${
               host ? `<br><b><a id="deal"onclick="deal()">Deal</a><b>` : ``
             }`
           );
           for (i = 0; i < p.length; i++) {
-            str += `<div class="table">0x${p[i].substring(38)}<i>${
-              p[i].toLowerCase() == acct ? '<b> You</b>' : ''
-            }${host ? ' Host' : ''}</i><br><br>${
-              players[1][i] < 1
-                ? `No previous results`
-                : `<p class="cards c${players[1][i]}"></p>`
-            }${
-              Math.max(players[2]) == players[2][i]
-                ? `<br><br><b>***WINNER***</b>`
-                : ``
-            }`;
+            str += `<div class="table">0x${p[i].substring(38)}<i>
+        ${p[i].toLowerCase() == acct ? '<b>You</b>' : ''}
+        ${host ? 'Host' : ''}</i><br><br>`;
+            p1 = players[1];
+            p2 = players[2];
+            p3 = players[3];
+            s2 = '';
+            c2 = i * 3;
+            for (j = 0; j < 5; j++) {
+              c1 = i * 5 + j;
+              s3 = '';
+              if (
+                (p2[c2] == j || p2[c2 + 1] == j || p2[c2 + 2] == j) &&
+                p2[c2] != p2[c2 + 1]
+              )
+                s3 = ' niu';
+              s2 += p1[c1] < 1 ? `` : `<p class="cards c${p1[c1]}${s3}"></p>`;
+            }
+            p1 = await contracta.player(p[i]).call();
+            str += `${
+              s2 == '' ? `<br>No previous results` : s2
+            }<br><br><p id="n${i}">${
+              p3[i] > 0
+                ? `You got niu! <b>${p3[i]}</b> points ${
+                    Math.max(p3) == p3[i] ? `<br><b>***WINNER***</b>` : ``
+                  }`
+                : `No niu =(`
+            }</p></div>`;
           }
         } else
           for (i = 1; i < 13; i++) {
@@ -74,15 +94,15 @@
             rl = rm[0].length;
             s = `<a onclick="join(${i})">`;
             str += `<div class="tables"><b>Room ${
-              i > 11
-                ? `<input id="r99" placeholder="custom"><br><br>`
-                : `${i}</b><br>Bet size: ${rm[3] / 1e18}<br>Players: ${
+              i < 12
+                ? `${i}</b><br>Bet size: ${rm[4] / 1e18}<br>Players: ${
                     rm[0].length
-                  }/20`
+                  }/5`
+                : `<input id="r99" placeholder="custom"><br><br>`
             }<br>${
               rl == 0
                 ? `<input id="i${i}" placeholder="Amount"> ${s}Create</a>`
-                : rl == 20
+                : rl == 5
                 ? `Full`
                 : `${s}Join</a>`
             }</div>`;
@@ -96,10 +116,11 @@
           else x -= 50;
         }
         waitTxt(0, 'load');
+        console.log('count');
       }
       async function deal() {
         waitTxt(1, 'load');
-        await contract.DEAL(room).send(LA);
+        await contract.DEAL(player[1]).send(FA);
       }
       async function join(a) {
         a = $('#r99').val() > 0 ? parseInt($('#99').val()) : a;
@@ -111,17 +132,15 @@
             ? 'Insufficent balance'
             : '';
         $('#load').html(str);
-        console.log(a);
-        console.log(b);
         if (str == '') {
           waitTxt(1, 'load');
-          await contract.JOIN(a, b).send(LA);
+          await contract.JOIN(a, b).send(FA);
           refreshInfo();
         }
       }
       async function leave() {
         waitTxt(1, 'load');
-        await contract.LEAVE(room, acct).send(LA);
+        await contract.LEAVE(player[1], acct).send(FA);
         refreshInfo();
       }
       (async () => {
@@ -151,14 +170,14 @@
             {
               inputs: [u1],
               name: 'getRoomInfo',
-              outputs: [u4, u2, u2, u1],
+              outputs: [u4, u2, u2, u2, u1],
               stateMutability: 'view',
               type: 'function',
             },
             {
               inputs: [u3],
               name: 'player',
-              outputs: [u1, u1, u1],
+              outputs: [u1, u1],
               stateMutability: 'view',
               type: 'function',
             },
@@ -170,9 +189,9 @@
               type: 'function',
             },
           ],
-          '0x6c4b4AbeAd0b39e7B06fCF0000E541487773fC59'
+          '0x2319E667FA8EF7cfA3eE4f2Aa1E6Fb8DC46ab617'
         );
-        load2();
+        await load2();
         refreshInfo();
       })();
       $(document).ready(function () {

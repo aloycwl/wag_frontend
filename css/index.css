@@ -1,0 +1,15 @@
+#txtRef {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #0000ff;
+}
+.nft {
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+.nft img {
+  width: 350px;
+  height: 350px;
+}

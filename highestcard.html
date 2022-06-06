@@ -99,7 +99,7 @@
       }
       async function deal() {
         waitTxt(1, 'load');
-        await contract.DEAL(room).send(LA);
+        await contract.DEAL(room).send(FA);
       }
       async function join(a) {
         a = $('#r99').val() > 0 ? parseInt($('#99').val()) : a;
@@ -111,8 +111,6 @@
             ? 'Insufficent balance'
             : '';
         $('#load').html(str);
-        console.log(a);
-        console.log(b);
         if (str == '') {
           waitTxt(1, 'load');
           await contract.JOIN(a, b).send(FA);

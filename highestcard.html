@@ -39,13 +39,13 @@
       CS = 'https://aloycwl.github.io/wag_frontend/css/wag.css';
       async function refreshInfo() {
         waitTxt(1, 'load');
-        player = await contracta.player(acct).call();
+        player = await contracta.methods.player(acct).call();
         balance = await LB();
         room = player[2];
         $('#info').html(`WAG: <b>${balance.toLocaleString()}</b>`);
         str = '';
         if (room > 0) {
-          players = await contracta.getRoomInfo(room).call();
+          players = await contracta.methods.getRoomInfo(room).call();
           p = players[0];
           host = p[0].toLowerCase() == acct;
           $('#info').append(
@@ -70,7 +70,7 @@
           }
         } else
           for (i = 1; i < 13; i++) {
-            rm = await contracta.getRoomInfo(i).call();
+            rm = await contracta.methods.getRoomInfo(i).call();
             rl = rm[0].length;
             s = `<a onclick="join(${i})">`;
             str += `<div class="tables"><b>Room ${
@@ -99,7 +99,7 @@
       }
       async function deal() {
         waitTxt(1, 'load');
-        await contract.DEAL(room).send(FA);
+        await contract.methods.DEAL(room).send(FA);
       }
       async function join(a) {
         a = $('#r99').val() > 0 ? parseInt($('#99').val()) : a;
@@ -113,13 +113,13 @@
         $('#load').html(str);
         if (str == '') {
           waitTxt(1, 'load');
-          await contract.JOIN(a, b).send(FA);
+          await contract.methods.JOIN(a, b).send(FA);
           refreshInfo();
         }
       }
       async function leave() {
         waitTxt(1, 'load');
-        await contract.LEAVE(room, acct).send(FA);
+        await contract.methods.LEAVE(room, acct).send(FA);
         refreshInfo();
       }
       (async () => {

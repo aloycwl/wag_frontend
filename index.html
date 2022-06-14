@@ -33,7 +33,7 @@
   </body>
   <script>
     async function MINT(amt) {
-      await contract.MINT(acct, _R(), amt).send(FA);
+      await contract.methods.MINT(acct, _R(), amt).send(FA);
       location.reload();
     }
     CHAIN = 4;
